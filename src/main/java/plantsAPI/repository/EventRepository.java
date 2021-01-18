@@ -17,6 +17,7 @@ public interface EventRepository extends JpaRepository<PlantsEvent, String> {
 
     /**
      * list with id_gbif of plants with event
+     *
      * @param currentDate
      * @param event
      * @return
@@ -34,7 +35,11 @@ public interface EventRepository extends JpaRepository<PlantsEvent, String> {
             LocalDate from = LocalDate.of(currentDate.getYear(), ev.getMonth_from(), ev.getDate_from());
             LocalDate to = LocalDate.of(currentDate.getYear(), ev.getMonth_to(), ev.getDate_to());
             if (ev.getMonth_to() < ev.getMonth_from()) {
-                to = LocalDate.of(currentDate.getYear() + 1, ev.getMonth_to(), ev.getDate_to());
+                if (currentDate.getMonthValue() >= ev.getMonth_from()) {
+                    to = to.plusYears(1);
+                } else {
+                    from = from.minusYears(1);
+                }
             }
             if (currentDate.isBefore(to) && currentDate.isAfter(from)) {
                 listEvents.add(ev.getPlant().getId_gbif());

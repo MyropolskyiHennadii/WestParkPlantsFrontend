@@ -1,10 +1,11 @@
 package plantsAPI.config;
 
+//now is useless class
 public class CommonConstants {
 
     private static CommonConstants instance;
 
-    private String preparedPhotosDirectory = "D:\\Intellij Projects\\WestParkPlants\\js_westpark_frontend\\public\\PreparedPhotosForPlantsDB";
+    //private String preparedPhotosDirectory = "D:\\Intellij Projects\\WestParkPlants\\js_westpark_frontend\\public\\PreparedPhotosForPlantsDB";
 
     private CommonConstants() {
     }
@@ -16,12 +17,12 @@ public class CommonConstants {
         return instance;
     }
 
-    public String getPreparedPhotosDirectory() {
+/*    public String getPreparedPhotosDirectory() {
         return preparedPhotosDirectory;
     }
 
     public void setPreparedPhotosDirectory(String preparedPhotosDirectory) {
         this.preparedPhotosDirectory = preparedPhotosDirectory;
-    }
+    }*/
 
 }
