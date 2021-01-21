@@ -55,7 +55,7 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
     default List<Geoposition> getAllGeopositionsWithPlantsID(){
         EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
         EntityManager em = emfGeoposition.createEntityManager();
-        TypedQuery<Geoposition> q = em.createQuery("SELECT NEW plantsBackend.markers.Geoposition(a.id, a.longitude, a.latitude, a.plant.id_gbif) FROM Geoposition a", Geoposition.class);
+        TypedQuery<Geoposition> q = em.createQuery("SELECT NEW plantsAPI.markers.Geoposition(a.id, a.longitude, a.latitude, a.plant.id_gbif) FROM Geoposition a", Geoposition.class);
         return q.getResultList();
     }
 }
