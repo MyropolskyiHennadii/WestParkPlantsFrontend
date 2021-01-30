@@ -34,29 +34,28 @@ public class API_GeopositionController {
     @Autowired
     @GetMapping("geopositions")
     public List<Geoposition> getGeopositions() {
-        //return this.geopositionRepository.findAll();
-        logger.info("-------------------------- start geo");
+        //logger.info("-------------------------- start geo");
         return this.geopositionRepository.getAllGeopositionsWithPlantsID();
     }
 
     @Autowired
     @GetMapping("longlatRectangle")
     public Double[] getLongLatRectangle() {
-        logger.info("-------------------------- start rectangle");
+        //logger.info("-------------------------- start rectangle");
         return this.geopositionRepository.getLongLatRectangle();
     }
 
     @Autowired
     @GetMapping("plantsList")
     public List<Plant> getDifferentPlants() {
-        logger.info("-------------------------- start plant");
+        //logger.info("-------------------------- start plant");
         return this.geopositionRepository.getDifferentPlants();
     }
 
     @Autowired
     @GetMapping("flowering")
     public List<String> getFlowering() {
-        logger.info("-------------------------- start flowering");
+        //logger.info("-------------------------- start flowering");
         LocalDate today = LocalDate.now();
         String event = "flowering";
         return this.eventRepositoryRepository.getEventsByDate(today, event);

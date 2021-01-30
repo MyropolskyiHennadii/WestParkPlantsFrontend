@@ -20,7 +20,7 @@ class RemoteDataComponent extends React.Component {
 
     componentDidMount() {
 
-        //get plants with coordinates and build frequency of plants (mostCommonPlants)
+        //get plants with coordinates
         RemoteDataService.getGeopositions(null).then(
             (response) => {
                 this.setState({ geopositions: response.data });

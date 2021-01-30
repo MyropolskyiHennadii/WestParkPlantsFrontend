@@ -44,7 +44,7 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
         TypedQuery<Plant> q = em.createQuery("SELECT DISTINCT a.plant FROM Geoposition a ORDER BY a.plant.scientific_name", Plant.class);
         List<Plant> plants = q.getResultList();
         //service element of the list: for filter in React
-        plants.add(0, new Plant("All (without filter)",  "All (without filter)"));
+        plants.add(0, new Plant("--All (without filter)",  "--All (without filter)"));
         return plants;
     }
 

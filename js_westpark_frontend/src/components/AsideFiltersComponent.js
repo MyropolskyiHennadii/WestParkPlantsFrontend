@@ -1,80 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import i18n from "i18next";
 import GeomarkersService from '../services/GeomarkersService';
 import RemotePhotosService from '../services/RemotePhotosService';
 import AsideInfoComponent from './AsideInfoComponent';
 import AsidePhotoComponent from './AsidePhotoComponent';
-import Summary from './Summary';
 import SynonymsAndLanguages from '../services/SynonymsAndLanguages';
 
 /* filters aside*/
 class AsideFiltersComponent extends React.Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            mostCommon: [],
-            mostRare: []
-        }
-    }
-    
-    //only for Summary
-    componentDidMount() {
-
-        //plants with frequency
-        const plantsFrequency = this.props.plantsFrequency;
-
-        let mostRareSpecies = "";
-        let mostCommonSpecies = "";
-
-        const kMax = 12;
-        let i = 0;
-        for (let [key, value] of plantsFrequency) {
-
-            const plant = this.props.plants.find(x => x.id_gbif === key);
-            this.state.mostRare.push(key);
-            mostRareSpecies += SynonymsAndLanguages.getPlantsNameInLanguage(plant, this.props.browserLanguage) + " (" + value 
-            + ((i === kMax-1) ? ").": "); ");
-            i++;
-            if (i >= kMax) {
-                break;
-            }
-        }
-
-        const reversePlantsFrequency = plantsFrequency;
-        //sorting the Map in reverse oder
-        reversePlantsFrequency[Symbol.iterator] = function* () {
-            yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
-        }
-        let j = 0;
-        for (let [key, value] of reversePlantsFrequency) {
-            this.state.mostCommon.push(key);
-            mostCommonSpecies += SynonymsAndLanguages.getPlantsNameInLanguage(this.props.plants.find(x => x.id_gbif === key), this.props.browserLanguage) + " (" + value 
-            + ((j === kMax-1) ? ").": "); ");
-            j++;
-            if (j >= kMax) {
-                break;
-            }
-        }
-
-        //flowering:
-        let iMax = 10;
-        if(this.props.flowering.length < iMax){
-            iMax = this.props.flowering.length;
-        }
-        let flowering = "";
-        for (let index = 0; index < iMax; index++) {
-            flowering += SynonymsAndLanguages.getPlantsNameInLanguage(this.props.plants.find(x => x.id_gbif === this.props.flowering[index]), this.props.browserLanguage) 
-            + ((index === (iMax-1)) ? ".": "; ");    
-        }
-
-        ReactDOM.render(
-            <React.StrictMode>
-                <Summary numberOfSpecies={this.props.plantsFrequency.size} mostCommonSpecies={mostCommonSpecies} mostRareSpecies={mostRareSpecies} flowering={flowering}/>
-            </React.StrictMode>,
-            document.getElementById('summary'))
-
-    }
 
     //something like callback to the parent (MainPane)
     handleChangeGeomarkers = (e) => this.props.handleChangeMarkers(e);
@@ -84,9 +18,9 @@ class AsideFiltersComponent extends React.Component {
         const geomarkers = GeomarkersService.getMarkersArray(
             this.props.centerLong,
             this.props.centerLat,
-            coordinatesWithFilter, this.props.plantsFrequency, this.props.plants, 
+            coordinatesWithFilter, this.props.plantsFrequency, this.props.plants,
             this.props.flowering,
-            this.props.browserLanguage);
+            i18n.language);
         this.handleChangeGeomarkers(geomarkers);
         return geomarkers;
     }
@@ -95,6 +29,7 @@ class AsideFiltersComponent extends React.Component {
     //handle selection in list (filter only for one species)
     handleChangeSelectFromList() {
         const selectFilter = document.getElementById("selectPlantID");
+        const locale = i18n.language;
 
         document.getElementById("id_common_trees").checked = false;
         document.getElementById("id_rare_trees").checked = false;
@@ -104,8 +39,8 @@ class AsideFiltersComponent extends React.Component {
                 this.props.centerLong,
                 this.props.centerLat,
                 this.props.geopositions, this.props.plantsFrequency, this.props.plants,
-                this.props.flowering, 
-                this.props.browserLanguage))
+                this.props.flowering,
+                locale))
             //clear info about plant
             ReactDOM.render(
                 <React.StrictMode>
@@ -157,7 +92,7 @@ class AsideFiltersComponent extends React.Component {
             //filter
             const coordinatesWithFilter = geopositions.filter(
                 function (e) { return this.indexOf(e.plant.id_gbif) < 0; },
-                this.state.mostCommon
+                this.props.mostCommon
             );
             this.refreshGeomarkers(coordinatesWithFilter);
 
@@ -171,7 +106,7 @@ class AsideFiltersComponent extends React.Component {
                 />
             </React.StrictMode>,
             document.getElementById('plantsPhoto')
-            );
+        );
     }
 
     //handle check-box only rare trees
@@ -192,7 +127,7 @@ class AsideFiltersComponent extends React.Component {
             //filter
             const coordinatesWithFilter = geopositions.filter(
                 function (e) { return this.indexOf(e.plant.id_gbif) >= 0; },
-                this.state.mostRare
+                this.props.mostRare
             );
             this.refreshGeomarkers(coordinatesWithFilter);
         } else {
@@ -204,12 +139,12 @@ class AsideFiltersComponent extends React.Component {
                 <AsidePhotoComponent feature={null} photos={null}
                 />
             </React.StrictMode>,
-            document.getElementById('plantsPhoto') 
-            );
+            document.getElementById('plantsPhoto')
+        );
     }
 
     render() {
-        const lang = this.props.browserLanguage;//language
+        const lang = i18n.language;//language
         //options for filter and sorting array of plants:
         const plants = this.props.plants;// all different plants
         let options = [];
@@ -233,8 +168,7 @@ class AsideFiltersComponent extends React.Component {
             if (nameA > nameB) {
                 return 1;
             }
-            return 0;
-        })
+            return 0;})  
 
         return (
             <div>

@@ -27,7 +27,7 @@ class MapWrapper extends React.Component {
 
     componentDidMount() {
 
-        this.doMapWithMarkers()
+        this.doMapWithMarkers();
 
     }
 
@@ -91,7 +91,7 @@ class MapWrapper extends React.Component {
         }));
         const styleMap = {
             width: '90%',
-            height: 550,
+            height: 500,
             border: "double",
             backgroundColor: '#cccccc',
             marginLeft: 'auto',

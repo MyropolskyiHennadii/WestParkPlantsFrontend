@@ -10,7 +10,7 @@ Language of the frontend is determined by browser's default language (de, ru, uk
 Map: OpenStreetMap.
 Markers: Openlayer library for JS.
 
-Database with plant's geolocations, descriptions and so on lie under MySQL and is managed by backend PhotosPlantsGeolocations, https://github.com/MyropolskyiHennadii/PhotosPlantsGeolocations.
+Database with plant's geolocations, descriptions and so on lies under MySQL and is managed by backend PhotosPlantsGeolocations, https://github.com/MyropolskyiHennadii/PhotosPlantsGeolocations.
 
 I don't know, how long I will pay for VPS, but now you can see the working application here:
 http://94.130.181.51:8095/WestPark

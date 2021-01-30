@@ -40,7 +40,8 @@ i18n
                     Filters: "Фильтры: ",
                     FiltersWithoutCommon: "Показать без наиболее часто встречающихся",
                     FiltersOnlyRarest: "Показать наиболее редкие",
-                    FiltersOnlyOne: "Показать только одно из списка"
+                    FiltersOnlyOne: "Показать только одно из списка",
+                    Footer: "Со всеми вопросами обращайтесь к Миропольскому Геннадию miropolskij@gmail.com"
                 }
             },
 
@@ -56,7 +57,8 @@ i18n
                     Filters: "Фільтри: ",
                     FiltersWithoutCommon: "Показати без найбільш вживаних",
                     FiltersOnlyRarest: "Показати найбільш рідкісні",
-                    FiltersOnlyOne: "Показати тільки одну зі списку"
+                    FiltersOnlyOne: "Показати тільки одну зі списку",
+                    Footer: "З усіма питаннями звертайтесь до Миропольського Геннадія miropolskij@gmail.com"
                 }
             },
 
@@ -65,13 +67,14 @@ i18n
                     title: "Die Pflanzen des Westpark (München)",
                     Summary: "Die Pflanzen des Westpark (München). Übersicht",
                     MappedSpecies: "Zahl den auf der Karte bezeichnete Arten: ",
-                    MostCommon: "üblicher Arten (grüner marker): ",
-                    MostRare: "Seltener Arten (dunkel-grüner marker): ",
+                    MostCommon: "Übliche Arten (grüner marker): ",
+                    MostRare: "Seltene Arten (dunkel-grüner marker): ",
                     Flowering: "In Blüte stehen (oranger marker): ",
                     Filters: "Filter: ",
-                    FiltersWithoutCommon: "Zeigen ohne üblicher",
-                    FiltersOnlyRarest: "Zeigen nur seltener",
-                    FiltersOnlyOne: "Zeigen nur ein von der Liste"
+                    FiltersWithoutCommon: "Zeigen ohne übliche",
+                    FiltersOnlyRarest: "Zeigen nur seltene",
+                    FiltersOnlyOne: "Zeigen nur eine von der Liste",
+                    Footer: "Wenden Sie mit allen Fragen an zu Myropolskyi Hennadii miropolskij@gmail.com"
                 }
             },
 
@@ -86,7 +89,8 @@ i18n
                     Filters: "Filters: ",
                     FiltersWithoutCommon: "Show without most common",
                     FiltersOnlyRarest: "Show only rarest",
-                    FiltersOnlyOne: "Select only one from all the list"
+                    FiltersOnlyOne: "Select only one from all the list",
+                    Footer: "With all questions mail to Myropolskyi Hennadii miropolskij@gmail.com"
                 }
             }
 
