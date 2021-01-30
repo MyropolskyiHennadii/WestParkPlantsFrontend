@@ -100,6 +100,7 @@ i18n
         defaultNS: ["translations"],
 
         react: {
+            useSuspense: false,
             wait: true
         }
     });
