@@ -32,26 +32,12 @@ public interface EventRepository extends JpaRepository<PlantsEvent, String> {
         TypedQuery<PlantsEvent> q = em.createQuery("SELECT a FROM PlantsEvent a WHERE " +
                 "a.event = '" +
                 event + "'", PlantsEvent.class);
-        try {
+ /*       try {
             EntityTransaction t = em.getTransaction();
             try {
-                t.begin();
+                t.begin();*/
                 events = q.getResultList();
-                for (PlantsEvent ev : events) {
-                    LocalDate from = LocalDate.of(currentDate.getYear(), ev.getMonth_from(), ev.getDate_from());
-                    LocalDate to = LocalDate.of(currentDate.getYear(), ev.getMonth_to(), ev.getDate_to());
-                    if (ev.getMonth_to() < ev.getMonth_from()) {
-                        if (currentDate.getMonthValue() >= ev.getMonth_from()) {
-                            to = to.plusYears(1);
-                        } else {
-                            from = from.minusYears(1);
-                        }
-                    }
-                    if (currentDate.isBefore(to) && currentDate.isAfter(from)) {
-                        listEvents.add(ev.getPlant().getId_gbif());
-                    }
-                }
-                t.commit();
+/*                t.commit();
             } finally {
                 if (t.isActive()) {
                     logger.error("-----------------Something wrong with list events");
@@ -60,7 +46,22 @@ public interface EventRepository extends JpaRepository<PlantsEvent, String> {
             }
         } finally {
             em.close();
+        }*/
+        for (PlantsEvent ev : events) {
+            LocalDate from = LocalDate.of(currentDate.getYear(), ev.getMonth_from(), ev.getDate_from());
+            LocalDate to = LocalDate.of(currentDate.getYear(), ev.getMonth_to(), ev.getDate_to());
+            if (ev.getMonth_to() < ev.getMonth_from()) {
+                if (currentDate.getMonthValue() >= ev.getMonth_from()) {
+                    to = to.plusYears(1);
+                } else {
+                    from = from.minusYears(1);
+                }
+            }
+            if (currentDate.isBefore(to) && currentDate.isAfter(from)) {
+                listEvents.add(ev.getPlant().getId_gbif());
+            }
         }
+
         return listEvents;
     }
 }

@@ -60,21 +60,8 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
         EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
         EntityManager em = emfGeoposition.createEntityManager();
         TypedQuery<Plant> q = em.createQuery("SELECT DISTINCT a.plant FROM Geoposition a ORDER BY a.plant.scientific_name", Plant.class);
-/*        try {
-            EntityTransaction t = em.getTransaction();
-            try {
-                t.begin();*/
-                plants = q.getResultList();
-  /*              t.commit();
-            } finally {
-                if (t.isActive()) {
-                    logger.error("-----------------Something wrong with getting list of plants");
-                    t.rollback();
-                }
-            }
-        } finally {
-            em.close();
-        }*/
+
+        plants = q.getResultList();
         //service element of the list: for filter in React
         plants.add(0, new Plant("--All (without filter)", "--All (without filter)"));
         return plants;
