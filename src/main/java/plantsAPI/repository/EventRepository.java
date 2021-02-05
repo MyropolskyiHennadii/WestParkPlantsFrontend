@@ -57,11 +57,11 @@ public interface EventRepository extends JpaRepository<PlantsEvent, String> {
                     from = from.minusYears(1);
                 }
             }
-            if (currentDate.isBefore(to) && currentDate.isAfter(from)) {
+            if ((currentDate.isBefore(to) || currentDate.equals(to)) && (currentDate.isAfter(from) || currentDate.equals(from))) {
                 listEvents.add(ev.getPlant().getId_gbif());
             }
         }
-
+        //logger.info("Flowering size: "+listEvents.size());
         return listEvents;
     }
 }

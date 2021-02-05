@@ -13,6 +13,11 @@ public class Geoposition {
     private double longitude;
     @Column
     private double latitude;
+    @Column
+    private int updated;//1 = was updated, 0 = wasn't
+    @Column
+    private int deleted;//1 = was marked as deleted, 0 = wasn't
+
     @OneToOne(fetch = FetchType.EAGER)//???
     @JoinColumn(name = "id_gbif")
     private Plant plant;//foreign key in database
@@ -21,6 +26,8 @@ public class Geoposition {
         this.longitude = longitude;
         this.latitude = latitude;
         this.plant = plant;
+        this.updated = 0;
+        this.deleted = 0;
     }
 
     public Geoposition(long id, double longitude, double latitude, Plant plant) {
@@ -28,6 +35,8 @@ public class Geoposition {
         this.longitude = longitude;
         this.latitude = latitude;
         this.plant = plant;
+        this.updated = 0;
+        this.deleted = 0;
     }
 
     //For quick fetch from react
@@ -36,6 +45,16 @@ public class Geoposition {
         this.longitude = longitude;
         this.latitude = latitude;
         this.plant = new Plant(id_gbif);
+        this.updated = 0;
+        this.deleted = 0;
+    }
+
+    public Geoposition(double longitude, double latitude, int updated, int deleted, Plant plant) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.updated = updated;
+        this.deleted = deleted;
+        this.plant = plant;
     }
 
     public Geoposition() {

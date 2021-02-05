@@ -33,12 +33,11 @@ public class API_GeopositionController {
     @Autowired
     private EventRepository eventRepository;
 
-//sessions fields, they fill when service start
+//session's fields, they fill when service start
     private List<Geoposition> geopositions;//all geoposition
     private Double[] longlatRectangle;//main rectangle for map
     private List<Plant> plants;//different plants from geopositions
 
-    @Autowired
     @GetMapping("geopositions")
     public List<Geoposition> getGeopositions() {
         //logger.info("-------------------------- start geo. Size: "+commonConstants.getGeopositions().size());
@@ -49,7 +48,6 @@ public class API_GeopositionController {
         return this.geopositions;
     }
 
-    @Autowired
     @GetMapping("longlatRectangle")
     public Double[] getLongLatRectangle() {
         //logger.info("-------------------------- start rectangle");
@@ -60,7 +58,6 @@ public class API_GeopositionController {
         return this.longlatRectangle;
     }
 
-    @Autowired
     @GetMapping("plantsList")
     public List<Plant> getDifferentPlants() {
         //logger.info("-------------------------- start plant size:"+commonConstants.getPlants().size());
@@ -71,10 +68,8 @@ public class API_GeopositionController {
         return this.plants;
     }
 
-    @Autowired
     @GetMapping("flowering")
     public List<String> getFlowering() {
-        //logger.info("-------------------------- start flowering");
         LocalDate today = LocalDate.now();
         String event = "flowering";
         return this.eventRepository.getEventsByDate(today, event);
