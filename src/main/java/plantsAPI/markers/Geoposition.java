@@ -57,6 +57,10 @@ public class Geoposition {
         this.plant = plant;
     }
 
+    public Geoposition(long id) {
+        this.id = id;
+    }
+
     public Geoposition() {
     }
 

@@ -38,12 +38,21 @@ public class API_GeopositionController {
     private Double[] longlatRectangle;//main rectangle for map
     private List<Plant> plants;//different plants from geopositions
 
+    /**
+     * set null to above session private variables (we need it after exchange, for example)
+     */
+    public void refreshPrivateVariables(){
+        geopositions = null;
+        longlatRectangle = null;
+        plants = null;
+    }
+
     @GetMapping("geopositions")
-    public List<Geoposition> getGeopositions() {
+    public List<Geoposition> getNotDeletedGeopositions() {
         //logger.info("-------------------------- start geo. Size: "+commonConstants.getGeopositions().size());
         //return this.geopositionRepository.getAllGeopositionsWithPlantsID();
         if(this.geopositions == null){
-            this.geopositions = geopositionRepository.getAllGeopositionsWithPlantsID();
+            this.geopositions = geopositionRepository.getNotDeletedGeopositionsWithPlantsID();
         }
         return this.geopositions;
     }

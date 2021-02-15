@@ -72,11 +72,11 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
      *
      * @return
      */
-    default List<Geoposition> getAllGeopositionsWithPlantsID() {
+    default List<Geoposition> getNotDeletedGeopositionsWithPlantsID() {
         EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
         EntityManager em = emfGeoposition.createEntityManager();
         List<Geoposition> allGeoposition = new ArrayList<>();
-        TypedQuery<Geoposition> q = em.createQuery("SELECT NEW plantsAPI.markers.Geoposition(a.id, a.longitude, a.latitude, a.plant.id_gbif) FROM Geoposition a", Geoposition.class);
+        TypedQuery<Geoposition> q = em.createQuery("SELECT NEW plantsAPI.markers.Geoposition(a.id, a.longitude, a.latitude, a.plant.id_gbif) FROM Geoposition a WHERE a.deleted != '" + 1 + "'", Geoposition.class);
         try {
             EntityTransaction t = em.getTransaction();
             try {
@@ -94,4 +94,118 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
         }
         return allGeoposition;
     }
+
+    /**
+     * quicker than findAll: getting all geopositions without details
+     *
+     * @return
+     */
+    default List<Geoposition> getDeletedGeopositions() {
+        EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
+        EntityManager em = emfGeoposition.createEntityManager();
+        List<Geoposition> allGeoposition = new ArrayList<>();
+        TypedQuery<Geoposition> q = em.createQuery("SELECT NEW plantsAPI.markers.Geoposition(a.id) FROM Geoposition a WHERE a.deleted = '" + 1 + "'", Geoposition.class);
+        try {
+            EntityTransaction t = em.getTransaction();
+            try {
+                t.begin();
+                allGeoposition = q.getResultList();
+                t.commit();
+            } finally {
+                if (t.isActive()) {
+                    logger.error("-----------------Something wrong with getting list of deleted geopositions");
+                    t.rollback();
+                }
+            }
+        } finally {
+            em.close();
+        }
+        return allGeoposition;
+    }
+
+    /**
+     * quicker than findAll: getting all geopositions without details
+     *
+     * @return
+     */
+    default List<Geoposition> getUpdatedGeopositions() {
+        EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
+        EntityManager em = emfGeoposition.createEntityManager();
+        List<Geoposition> allGeoposition = new ArrayList<>();
+        TypedQuery<Geoposition> q = em.createQuery("SELECT NEW plantsAPI.markers.Geoposition(a.id, a.longitude, a.latitude, a.plant.id_gbif) FROM Geoposition a WHERE a.updated = '" + 1 + "'", Geoposition.class);
+        try {
+            EntityTransaction t = em.getTransaction();
+            try {
+                t.begin();
+                allGeoposition = q.getResultList();
+                t.commit();
+            } finally {
+                if (t.isActive()) {
+                    logger.error("-----------------Something wrong with getting list of updated geopositions");
+                    t.rollback();
+                }
+            }
+        } finally {
+            em.close();
+        }
+        return allGeoposition;
+    }
+
+    /**
+     * delete geoposition by id
+     *
+     * @param id
+     */
+    default void deleteGeoposition(long id) {
+        EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions_remote_admin");
+        EntityManager em = emfGeoposition.createEntityManager();
+        Geoposition geoExist = em.find(Geoposition.class, id);
+        if (geoExist != null) {
+            try {
+                EntityTransaction t = em.getTransaction();
+                try {
+                    t.begin();
+                    logger.info("Delete geoposition id {}", id);
+                    //temporarily comment
+                    //em.remove(geoExist);
+                    t.commit();
+                } finally {
+                    if (t.isActive()) {
+                        logger.error("-----------------Something wrong with deleting geoposition's id {}", id);
+                        t.rollback();
+                    }
+                }
+            } finally {
+                em.close();
+            }
+        }
+    }
+
+    /**
+     * update geoposition
+     *
+     * @param geoposition
+     */
+    default void updateGeoposition(Geoposition geoposition) {
+        EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions_remote_admin");
+        EntityManager em = emfGeoposition.createEntityManager();
+        try {
+            EntityTransaction t = em.getTransaction();
+            try {
+                t.begin();
+                logger.info("update geoposition id {}", geoposition.getId());
+                //temporarily comment
+                //em.persist(geoposition);
+                t.commit();
+            } finally {
+                if (t.isActive()) {
+                    logger.error("-----------------Something wrong with updating geoposition's id {}", geoposition.getId());
+                    t.rollback();
+                }
+            }
+        } finally {
+            em.close();
+        }
+    }
+
 }
