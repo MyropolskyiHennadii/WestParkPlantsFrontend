@@ -14,7 +14,8 @@ public class PlantsEvent {
     private static Logger logger = LoggerFactory.getLogger(PlantsEvent.class);
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //remark because of exchange with local database, where event can appear
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column
@@ -27,6 +28,10 @@ public class PlantsEvent {
     private int date_to;
     @Column
     private int month_to;
+    @Column
+    private int updated;//1 = was updated, 0 = wasn't
+    @Column
+    private int deleted;//1 = was marked as deleted, 0 = wasn't
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_gbif")
@@ -43,6 +48,30 @@ public class PlantsEvent {
         this.date_to = date_to;
         this.month_to = month_to;
         this.plant = plant;
+        this.updated = 0;
+        this.deleted = 0;
+    }
+
+    public PlantsEvent(String event, int date_from, int month_from, int date_to, int month_to, int updated, int deleted, Plant plant) {
+        this.event = event;
+        this.date_from = date_from;
+        this.month_from = month_from;
+        this.date_to = date_to;
+        this.month_to = month_to;
+        this.updated = updated;
+        this.deleted = deleted;
+        this.plant = plant;
+    }
+
+    //for exchange between local and remote database
+    public PlantsEvent(int id, String event, int date_from, int month_from, int date_to, int month_to, String id_gbif) {
+        this.id = id;
+        this.event = event;
+        this.date_from = date_from;
+        this.month_from = month_from;
+        this.date_to = date_to;
+        this.month_to = month_to;
+        this.plant = new Plant(id_gbif);
     }
 
     public String getEvent() {
@@ -93,6 +122,30 @@ public class PlantsEvent {
         this.plant = plant;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(int updated) {
+        this.updated = updated;
+    }
+
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -111,6 +164,7 @@ public class PlantsEvent {
     public String toString() {
         return "PlantsEvent{" +
                 "event='" + event + '\'' +
+                ", id=" + id +
                 ", date_from=" + date_from +
                 ", month_from=" + month_from +
                 ", date_to=" + date_to +

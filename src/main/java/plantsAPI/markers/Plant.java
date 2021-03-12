@@ -30,6 +30,10 @@ public class Plant {
     private String kind = "Tree";
     @Column
     private int show_only_flowering = 0;//if Yes == 1
+    @Column
+    private int updated;//1 = was updated, 0 = wasn't
+    @Column
+    private int deleted;//1 = was marked as deleted, 0 = wasn't
 
     @OneToMany(targetEntity = ImageFileWithMetadata.class, mappedBy = "plant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference//!!! important to prevent infinite loop with json references
@@ -66,6 +70,19 @@ public class Plant {
         this.scientific_name = scientific_name;
         this.web_reference_wiki = web_reference_wiki;
         this.kind = kind;
+    }
+
+    public Plant(String id_gbif, String common_names, String scientific_name_family, String scientific_name_authorship, String scientific_name, String web_reference_wiki, String kind, int show_only_flowering, int updated, int deleted) {
+        this.id_gbif = id_gbif;
+        this.common_names = common_names;
+        this.scientific_name_family = scientific_name_family;
+        this.scientific_name_authorship = scientific_name_authorship;
+        this.scientific_name = scientific_name;
+        this.web_reference_wiki = web_reference_wiki;
+        this.kind = kind;
+        this.show_only_flowering = show_only_flowering;
+        this.updated = updated;
+        this.deleted = deleted;
     }
 
     public Set<PlantsSynonym> getSynonyms() {
@@ -156,9 +173,25 @@ public class Plant {
         this.events = events;
     }
 
+    public int getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(int updated) {
+        this.updated = updated;
+    }
+
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public String toString() {
-        return scientific_name + ", nameAuthorship = " + scientific_name_authorship + ". id_gbif = " + id_gbif;
+        return ("id_gbif = " + id_gbif + "; " + scientific_name + ", nameAuthorship = " + scientific_name_authorship);
     }
 
     @Override

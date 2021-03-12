@@ -25,7 +25,7 @@ class RemoteDataComponent extends React.Component {
             (response) => {
                 this.setState({ geopositions: response.data });
                 this.setState({ isLoadingData: false });
-                console.log("Geopositions loaded.")
+                console.log("Geopositions loaded. Size = "+response.data.length)
             }
         );
 
@@ -52,7 +52,7 @@ class RemoteDataComponent extends React.Component {
             (response) => {
                 this.setState({ flowering: response.data });
                 this.setState({ isLoadingFlowering: false });
-                console.log("Flowering loaded")
+                console.log("Flowering loaded. Size: "+response.data.length)
             }
         );
 

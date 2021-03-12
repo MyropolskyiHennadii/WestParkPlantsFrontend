@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+//i18next
+import i18n from "i18next";
+
 //ol
 import { Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
@@ -14,6 +17,7 @@ import { Vector as VectorLayer } from 'ol/layer';
 import AsideInfoComponent from './AsideInfoComponent';
 import AsidePhotoComponent from './AsidePhotoComponent';
 import RemotePhotosService from '../services/RemotePhotosService';
+import GeomarkersService from '../services/GeomarkersService';
 
 /* just the map */
 class MapWrapper extends React.Component {
@@ -51,12 +55,15 @@ class MapWrapper extends React.Component {
         });
 
         //by click on point - show details of plant
+        const currentThis = this;
         map.on('click', function (evt) {
             const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
                 return feature;
             });
             if (feature) {
                 //info
+                GeomarkersService.getNameFeatureInLanguage(feature, i18n.language, currentThis.props.plants);
+
                 ReactDOM.render(
                     <React.StrictMode>
                         <AsideInfoComponent feature={feature} />
@@ -76,7 +83,7 @@ class MapWrapper extends React.Component {
                 //photo
                 ReactDOM.render(
                     <React.StrictMode>
-                        <AsidePhotoComponent feature={null} photos={null}/>
+                        <AsidePhotoComponent feature={null} photos={null} />
                     </React.StrictMode>,
                     document.getElementById('plantsPhoto')
                 );

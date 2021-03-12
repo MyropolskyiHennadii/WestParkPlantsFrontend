@@ -58,6 +58,17 @@ class GeomarkersService {
         }
     }
 
+    //we have features, but by selecting new language we have to rename them
+    getNameFeatureInLanguage(feature, lang, plants) {
+        const plantID = feature.get("gbif");
+        console.log("Plant's id = " + plantID)
+        const plant = plants
+            .find(obj => { return obj.id_gbif === plantID });
+        console.log("plant = " + plant + ", keys " + Object.keys(plant))
+        feature.set("name", SynonymsAndLanguages.getPlantsNameInLanguage(plant, lang));
+        feature.set("wiki", SynonymsAndLanguages.getWikiPageInLanguage(plant, lang));
+    }
+
     //form actual array of geomarkers. 
     //centerLong: center of map, longitude
     //centerLat: center of map, latitude
@@ -89,8 +100,10 @@ class GeomarkersService {
                     geometry: new Point(fromLonLat([geopositions[index].longitude, geopositions[index].latitude])),
                     id: index + "_" + geopositions[index].id,
                     gbif: plant.id_gbif,//id of plant
-                    name: SynonymsAndLanguages.getPlantsNameInLanguage(plant, lang),
-                    wiki: SynonymsAndLanguages.getWikiPageInLanguage(plant, lang),
+                    /* name: SynonymsAndLanguages.getPlantsNameInLanguage(plant, lang),
+                    wiki: SynonymsAndLanguages.getWikiPageInLanguage(plant, lang), */
+                    name: "",
+                    wiki: "",
                     desc: plant.scientific_name_authorship + "; " + plant.scientific_name_family + ": common names " + plant.common_names
                 }
             );

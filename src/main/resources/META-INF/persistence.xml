@@ -15,6 +15,18 @@
         </properties>
     </persistence-unit>
 
+    <persistence-unit name="plants_remote_admin">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <properties>
+            <property name="hibernate.connection.url"
+                      value="jdbc:mysql://localhost:3306/places_and_descriptions?useSSL=false&amp;autoReconnect=true&amp;serverTimezone=UTC&amp;characterEncoding=utf8"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.username" value="remote_admin"/>
+            <property name="hibernate.connection.password" value="maintain"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+        </properties>
+    </persistence-unit>
+
     <persistence-unit name="pictures">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <properties>
@@ -45,8 +57,8 @@
             <property name="hibernate.connection.url"
                       value="jdbc:mysql://localhost:3306/places_and_descriptions?allowPublicKeyRetrieval=true&amp;autoReconnect=true&amp;serverTimezone=UTC&amp;characterEncoding=utf8"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="hibernate.connection.username" value="..."/>
-            <property name="hibernate.connection.password" value="..."/>
+            <property name="hibernate.connection.username" value="remote_admin"/>
+            <property name="hibernate.connection.password" value="maintain"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
         </properties>
     </persistence-unit>
@@ -63,6 +75,18 @@
         </properties>
     </persistence-unit>
 
+    <persistence-unit name="plants_synonyms_remote_admin">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <properties>
+            <property name="hibernate.connection.url"
+                      value="jdbc:mysql://localhost:3306/places_and_descriptions?useSSL=false&amp;autoReconnect=true&amp;serverTimezone=UTC&amp;characterEncoding=utf8"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.username" value="remote_admin"/>
+            <property name="hibernate.connection.password" value="maintain"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+        </properties>
+    </persistence-unit>
+
     <persistence-unit name="plants_events">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <properties>
@@ -71,6 +95,18 @@
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
             <property name="hibernate.connection.username" value="guest"/>
             <property name="hibernate.connection.password" value="1961"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+        </properties>
+    </persistence-unit>
+
+    <persistence-unit name="plants_events_remote_admin">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <properties>
+            <property name="hibernate.connection.url"
+                      value="jdbc:mysql://localhost:3306/places_and_descriptions?useSSL=false&amp;autoReconnect=true&amp;serverTimezone=UTC&amp;characterEncoding=utf8"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.username" value="remote_admin"/>
+            <property name="hibernate.connection.password" value="maintain"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
         </properties>
     </persistence-unit>

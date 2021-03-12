@@ -12,7 +12,8 @@ public class PlantsSynonym {
     private static Logger logger = LoggerFactory.getLogger(Plant.class);
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //remark because of exchange with local database, where synonym can appear
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,13 +27,50 @@ public class PlantsSynonym {
     private String lang_name;
     @Column
     private String web_reference_wiki;
+    @Column
+    private int updated;//1 = was updated, 0 = wasn't
+    @Column
+    private int deleted;//1 = was marked as deleted, 0 = wasn't
 
     public PlantsSynonym(Plant plant, String lang, String lang_name, String web_reference_wiki) {
         this.plant = plant;
         this.lang = lang;
         this.lang_name = lang_name;
         this.web_reference_wiki = web_reference_wiki;
+        this.updated = 0;
+        this.deleted = 0;
     }
+
+    public PlantsSynonym(Plant plant, String lang, String lang_name, String web_reference_wiki, long id) {
+        this.plant = plant;
+        this.lang = lang;
+        this.lang_name = lang_name;
+        this.web_reference_wiki = web_reference_wiki;
+        this.id = id;
+        this.updated = 0;
+        this.deleted = 0;
+    }
+
+    public PlantsSynonym(Plant plant, String lang, String lang_name, String web_reference_wiki, int updated, int deleted) {
+        this.plant = plant;
+        this.lang = lang;
+        this.lang_name = lang_name;
+        this.web_reference_wiki = web_reference_wiki;
+        this.updated = updated;
+        this.deleted = deleted;
+    }
+
+    //for exchange between databases
+    public PlantsSynonym(long id, String lang, String lang_name, String web_reference_wiki, String gbif) {
+        this.id = id;
+        this.plant = new Plant(gbif);
+        this.lang = lang;
+        this.lang_name = lang_name;
+        this.web_reference_wiki = web_reference_wiki;
+        this.updated = 0;
+        this.deleted = 0;
+    }
+
 
     public PlantsSynonym() {
     }
@@ -69,12 +107,40 @@ public class PlantsSynonym {
         this.web_reference_wiki = web_reference_wiki;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public int getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(int updated) {
+        this.updated = updated;
+    }
+
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "PlantsSynonym{" +
-                "plant=" + plant +
+                "id=" + id +
+                ", plant=" + plant.getId_gbif() +
                 ", lang='" + lang + '\'' +
                 ", lang_name='" + lang_name + '\'' +
+                ", web_reference_wiki='" + web_reference_wiki + '\'' +
+                ", updated=" + updated +
+                ", deleted=" + deleted +
                 '}';
     }
 

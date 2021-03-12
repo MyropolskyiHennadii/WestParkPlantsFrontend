@@ -7,7 +7,8 @@ import javax.persistence.*;
 public class Geoposition {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //remark because of exchange with local database, where geoposition can appear
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column
     private double longitude;
@@ -94,6 +95,22 @@ public class Geoposition {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(int updated) {
+        this.updated = updated;
+    }
+
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
     }
 
     @Override

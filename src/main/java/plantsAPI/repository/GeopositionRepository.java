@@ -166,8 +166,7 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
                 try {
                     t.begin();
                     logger.info("Delete geoposition id {}", id);
-                    //temporarily comment
-                    //em.remove(geoExist);
+                    em.remove(geoExist);
                     t.commit();
                 } finally {
                     if (t.isActive()) {
@@ -194,7 +193,12 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
             try {
                 t.begin();
                 logger.info("update geoposition id {}", geoposition.getId());
-                //temporarily comment
+/*                geoExist.setLatitude(geoposition.getLatitude());
+                geoExist.setLongitude(geoposition.getLongitude());
+                geoExist.setPlant(geoposition.getPlant());
+                geoExist.setDeleted(0);
+                geoExist.setUpdated(0);*/
+                em.merge(geoposition);
                 //em.persist(geoposition);
                 t.commit();
             } finally {
@@ -208,4 +212,29 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
         }
     }
 
+    /**
+     * add new geoposition
+     * @param geoposition
+     */
+    default void addGeoposition(Geoposition geoposition) {
+        EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions_remote_admin");
+        EntityManager em = emfGeoposition.createEntityManager();
+        try {
+            EntityTransaction t = em.getTransaction();
+            try {
+                t.begin();
+                logger.info("add geoposition id {}", geoposition.getId() + ". Geoposition = " + geoposition);
+                logger.info("persist...");
+                em.persist(geoposition);
+                t.commit();
+            } finally {
+                if (t.isActive()) {
+                    logger.error("-----------------Something wrong with adding geoposition's id {}", geoposition.getId());
+                    t.rollback();
+                }
+            }
+        } finally {
+            em.close();
+        }
+    }
 }
