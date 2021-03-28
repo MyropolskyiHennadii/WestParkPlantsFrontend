@@ -57,6 +57,7 @@ class MainPaneComponent extends React.Component {
     //3: mostRareSpecies;
     //4: nowFlowering;
     //5: plantsFrequency;
+    //6: setFamilies
     refreshFrequencyData() {
 
         const plantsFrequency = this.makePlantsFrequency();
@@ -68,6 +69,7 @@ class MainPaneComponent extends React.Component {
         let mostCommonSpecies = "";
         let mostCommon = [];
 
+        //most rare
         const kMax = 12;
         let i = 0;
         for (let [key, value] of plantsFrequency) {
@@ -82,6 +84,7 @@ class MainPaneComponent extends React.Component {
             }
         }
 
+        //most common
         const reversePlantsFrequency = plantsFrequency;
         //sorting the Map in reverse oder
         reversePlantsFrequency[Symbol.iterator] = function* () {
@@ -99,7 +102,7 @@ class MainPaneComponent extends React.Component {
         }
 
         //flowering:
-        let iMax = 10;
+        let iMax = 15;
         if (this.props.flowering.length < iMax) {
             iMax = this.props.flowering.length;
         }
@@ -183,7 +186,7 @@ class MainPaneComponent extends React.Component {
 
         this.renderSummary(frequencyData);
         this.renderAsideFilter(frequencyData);
-   
+
     }
 
 

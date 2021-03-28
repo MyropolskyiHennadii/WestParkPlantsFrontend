@@ -27,12 +27,11 @@ public interface EventRepository extends JpaRepository<PlantsEvent, String> {
         List<String> listEvents = new ArrayList<>();
         EntityManagerFactory emfEvent = Persistence.createEntityManagerFactory("plants_events");
         EntityManager em = emfEvent.createEntityManager();
-        List<PlantsEvent> events = new ArrayList<>();
 //TODO FUNCTION to MySQL
         TypedQuery<PlantsEvent> q = em.createQuery("SELECT a FROM PlantsEvent a WHERE " +
                 "a.event = '" +
                 event + "'", PlantsEvent.class);
-        events = q.getResultList();
+        List<PlantsEvent> events = q.getResultList();
         for (PlantsEvent ev : events) {
             LocalDate from = LocalDate.of(currentDate.getYear(), ev.getMonth_from(), ev.getDate_from());
             LocalDate to = LocalDate.of(currentDate.getYear(), ev.getMonth_to(), ev.getDate_to());
@@ -93,9 +92,9 @@ public interface EventRepository extends JpaRepository<PlantsEvent, String> {
                 t.begin();
                 logger.info("update event id {}", event.getId());
                 if (eventExist == null) {
-                    //em.persist(event);
+                    em.persist(event);
                 } else {
-                    //em.merge(event);
+                    em.merge(event);
                 }
                 t.commit();
             } finally {

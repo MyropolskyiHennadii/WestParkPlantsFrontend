@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 //Controller for exchange between local and remote databases
 public class ExchangeController {
 
-    private static Logger logger = LoggerFactory.getLogger(ExchangeController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExchangeController.class);
 
     @Autowired
     private GeopositionRepository geopositionRepository;
@@ -119,6 +119,7 @@ public class ExchangeController {
                 }
                 //refresh list geopositions and so on in main controller
                 api_geopositionController.refreshPrivateVariables();
+                return true;
             } catch (ParseException e) {
                 e.printStackTrace();
                 return false;
@@ -170,6 +171,7 @@ public class ExchangeController {
                 }
                 //refresh list geopositions and so on in main controller
                 api_geopositionController.refreshPrivateVariables();
+                return true;
             } catch (ParseException e) {
                 e.printStackTrace();
                 return false;
@@ -282,14 +284,15 @@ public class ExchangeController {
                 JSONArray updated = (JSONArray) results.get("updated");
                 for (Object el : updated) {
                     JSONObject location = (JSONObject) ((JSONObject) el).get("item");
-                    eventRepository.updateEvent(new PlantsEvent(
+                    PlantsEvent event = new PlantsEvent(
                             Integer.parseInt("" + location.get("id")),
                             (String) location.get("event"),
                             Integer.parseInt("" + location.get("date_from")),
                             Integer.parseInt("" + location.get("month_from")),
                             Integer.parseInt("" + location.get("date_to")),
                             Integer.parseInt("" + location.get("month_to")),
-                            (String) location.get("id_gbif")));
+                            (String) location.get("id_gbif"));
+                    eventRepository.updateEvent(event);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();

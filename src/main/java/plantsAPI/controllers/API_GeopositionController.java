@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("apiWestpark/")
 public class API_GeopositionController {
 
-    private static Logger logger = LoggerFactory.getLogger(API_GeopositionController.class);
+    private static final Logger logger = LoggerFactory.getLogger(API_GeopositionController.class);
 
     @Autowired
     private GeopositionRepository geopositionRepository;
@@ -70,9 +70,8 @@ public class API_GeopositionController {
     @GetMapping("plantsList")
     public List<Plant> getDifferentPlants() {
         //logger.info("-------------------------- start plant size:"+commonConstants.getPlants().size());
-        //return this.geopositionRepository.getDifferentPlants();
         if(this.plants == null){
-            this.plants = geopositionRepository.getDifferentPlants();
+            this.plants = this.geopositionRepository.getDifferentPlants();
         }
         return this.plants;
     }
@@ -93,9 +92,8 @@ public class API_GeopositionController {
     public List<String> getPhotoForPlant(@RequestBody String params) {
         List<String> listImagesPath = new ArrayList<>();
         JSONParser parser = new JSONParser();
-        JSONObject jsonObject = null;
         try {
-            jsonObject = (JSONObject) parser.parse(params);
+            JSONObject jsonObject = (JSONObject) parser.parse(params);
             JSONObject jsonParameter = (JSONObject) jsonObject.get("params");
             String id_gbif = (String) jsonParameter.get("id_gbif");
             listImagesPath = plantRepository.getPictureByPlantsID(id_gbif);

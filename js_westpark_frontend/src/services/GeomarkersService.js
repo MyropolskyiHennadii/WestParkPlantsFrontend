@@ -64,7 +64,6 @@ class GeomarkersService {
         console.log("Plant's id = " + plantID)
         const plant = plants
             .find(obj => { return obj.id_gbif === plantID });
-        console.log("plant = " + plant + ", keys " + Object.keys(plant))
         feature.set("name", SynonymsAndLanguages.getPlantsNameInLanguage(plant, lang));
         feature.set("wiki", SynonymsAndLanguages.getWikiPageInLanguage(plant, lang));
     }

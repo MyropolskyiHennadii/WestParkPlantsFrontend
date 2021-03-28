@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AppController {
 
 
-    private static Logger logger = LoggerFactory.getLogger(AppController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AppController.class);
 
     @RequestMapping({"/WestPark"})
     public String loadUI() {

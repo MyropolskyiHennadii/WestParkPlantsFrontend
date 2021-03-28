@@ -40,7 +40,8 @@ i18n
                     Filters: "Фильтры: ",
                     FiltersWithoutCommon: "Показать без наиболее часто встречающихся",
                     FiltersOnlyRarest: "Показать наиболее редкие",
-                    FiltersOnlyOne: "Показать только одно из списка",
+                    FiltersOnlyOne: "Показать только один вид из списка",
+                    FiltersByFamily: "Показать только одно семейство из списка",
                     Footer: "Со всеми вопросами обращайтесь к Миропольскому Геннадию miropolskij@gmail.com"
                 }
             },
@@ -57,7 +58,8 @@ i18n
                     Filters: "Фільтри: ",
                     FiltersWithoutCommon: "Показати без найбільш вживаних",
                     FiltersOnlyRarest: "Показати найбільш рідкісні",
-                    FiltersOnlyOne: "Показати тільки одну зі списку",
+                    FiltersOnlyOne: "Показати тільки один вид зі списку",
+                    FiltersByFamily: "Показати тільки одну родину зі списку",
                     Footer: "З усіма питаннями звертайтесь до Миропольського Геннадія miropolskij@gmail.com"
                 }
             },
@@ -73,7 +75,8 @@ i18n
                     Filters: "Filter: ",
                     FiltersWithoutCommon: "Zeigen ohne übliche",
                     FiltersOnlyRarest: "Zeigen nur seltene",
-                    FiltersOnlyOne: "Zeigen nur eine von der Liste",
+                    FiltersOnlyOne: "Zeigen nur eine Art von der Liste",
+                    FiltersByFamily: "Zeigen nur eine Familie von der Liste",
                     Footer: "Wenden Sie mit allen Fragen an zu Myropolskyi Hennadii miropolskij@gmail.com"
                 }
             },
@@ -89,7 +92,8 @@ i18n
                     Filters: "Filters: ",
                     FiltersWithoutCommon: "Show without most common",
                     FiltersOnlyRarest: "Show only rarest",
-                    FiltersOnlyOne: "Select only one from all the list",
+                    FiltersOnlyOne: "Select only one species from all the list",
+                    FiltersByFamily: "Select only one family from list",
                     Footer: "With all questions mail to Myropolskyi Hennadii miropolskij@gmail.com"
                 }
             }
