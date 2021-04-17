@@ -17,7 +17,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
+//after dockerizing frontend:
+@CrossOrigin(origins = "http://94.130.181.51:8094")
 @RestController
 @RequestMapping("apiWestpark/")
 public class API_GeopositionController {
@@ -49,8 +51,6 @@ public class API_GeopositionController {
 
     @GetMapping("geopositions")
     public List<Geoposition> getNotDeletedGeopositions() {
-        //logger.info("-------------------------- start geo. Size: "+commonConstants.getGeopositions().size());
-        //return this.geopositionRepository.getAllGeopositionsWithPlantsID();
         if(this.geopositions == null){
             this.geopositions = geopositionRepository.getNotDeletedGeopositionsWithPlantsID();
         }
@@ -59,8 +59,6 @@ public class API_GeopositionController {
 
     @GetMapping("longlatRectangle")
     public Double[] getLongLatRectangle() {
-        //logger.info("-------------------------- start rectangle");
-        //return this.geopositionRepository.getLongLatRectangle();
         if(this.longlatRectangle == null){
             this.longlatRectangle = geopositionRepository.getLongLatRectangle();
         }
@@ -69,7 +67,6 @@ public class API_GeopositionController {
 
     @GetMapping("plantsList")
     public List<Plant> getDifferentPlants() {
-        //logger.info("-------------------------- start plant size:"+commonConstants.getPlants().size());
         if(this.plants == null){
             this.plants = this.geopositionRepository.getDifferentPlants();
         }

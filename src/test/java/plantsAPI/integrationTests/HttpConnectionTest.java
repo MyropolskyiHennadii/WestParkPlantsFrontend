@@ -22,7 +22,7 @@ public class HttpConnectionTest {
     @Test
     @Order(0)
     void testHttpRequestToWebApplication() throws IOException {
-        String pathToApp = "http://94.130.181.51:8095";
+        String pathToApp = "http://94.130.181.51:8095/WestPark";
         logger.info("Testing HTTP-connection to: "+pathToApp);
         // Given
         HttpUriRequest request = new HttpGet( pathToApp);

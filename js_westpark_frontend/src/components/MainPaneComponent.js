@@ -102,12 +102,22 @@ class MainPaneComponent extends React.Component {
         }
 
         //flowering:
-        let iMax = 15;
+        let iMax = 20;
         if (this.props.flowering.length < iMax) {
             iMax = this.props.flowering.length;
         }
         let nowFlowering = "";
         for (let index = 0; index < iMax; index++) {
+
+            //if there are "flowering", which are absent in geopositions
+            let curPlant = this.props.plants.find(x => x.id_gbif === this.props.flowering[index]);
+            if((curPlant=== undefined)
+            || (curPlant === null)){
+                console.log("Omit flowering plant with gbif = " + this.props.flowering[index]);
+                iMax++;
+                continue;
+            }
+
             nowFlowering += SynonymsAndLanguages.getPlantsNameInLanguage(this.props.plants.find(x => x.id_gbif === this.props.flowering[index]), i18n.language)
                 + ((index === (iMax - 1)) ? "." : "; ");
         }

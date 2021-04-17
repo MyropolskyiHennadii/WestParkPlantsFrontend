@@ -3,6 +3,9 @@ class SynonymsAndLanguages {
 
     //get plant's name in browser's (user's) language
     getPlantsNameInLanguage(plant, lang) {
+        if((plant === undefined) || (plant === null)){
+            return "undefined";
+        }
         if (lang === 'en') {
             return plant.scientific_name;
         }

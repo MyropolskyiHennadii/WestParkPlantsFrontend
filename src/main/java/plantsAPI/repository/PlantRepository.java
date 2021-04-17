@@ -17,6 +17,8 @@ import java.util.Set;
 public interface PlantRepository extends JpaRepository<Plant, String> {
 
     Logger logger = LoggerFactory.getLogger(PlantRepository.class);
+    EntityManagerFactory emfPlantAdmin = Persistence.createEntityManagerFactory("plants_remote_admin");
+    EntityManagerFactory emfPlant = Persistence.createEntityManagerFactory("plants");
 
     /**
      * all paths to photos for the plant
@@ -24,7 +26,7 @@ public interface PlantRepository extends JpaRepository<Plant, String> {
      * @return
      */
     default List<String> getPictureByPlantsID(String id_gbif) {
-        EntityManagerFactory emfPlant = Persistence.createEntityManagerFactory("plants");
+        //EntityManagerFactory emfPlant = Persistence.createEntityManagerFactory("plants");
         EntityManager em = emfPlant.createEntityManager();
 
         List<String> imagePath = new ArrayList<>();
@@ -58,7 +60,7 @@ public interface PlantRepository extends JpaRepository<Plant, String> {
      */
     default List<Plant> getUpdatedPlants(){
         List<Plant> updated = new ArrayList<>();
-        EntityManagerFactory emfPlant = Persistence.createEntityManagerFactory("plants");
+        //EntityManagerFactory emfPlant = Persistence.createEntityManagerFactory("plants");
         EntityManager em = emfPlant.createEntityManager();
         TypedQuery<Plant> q = em.createQuery("SELECT NEW plantsAPI.markers.Plant(a.id_gbif, a.common_names, a.scientific_name_family, a.scientific_name_authorship, a.scientific_name, a.web_reference_wiki, a.kind, a.show_only_flowering, 0, 0) FROM Plant a WHERE a.updated = '" + 1 + "'", Plant.class);
         try {
@@ -84,8 +86,8 @@ public interface PlantRepository extends JpaRepository<Plant, String> {
      * @param plant
      */
     default void updatePlant(Plant plant) {
-        EntityManagerFactory emfPlant = Persistence.createEntityManagerFactory("plants_remote_admin");
-        EntityManager em = emfPlant.createEntityManager();
+        //EntityManagerFactory emfPlant = Persistence.createEntityManagerFactory("plants_remote_admin");
+        EntityManager em = emfPlantAdmin.createEntityManager();
         Plant plantExist = em.find(Plant.class, plant.getId_gbif());
         try {
             EntityTransaction t = em.getTransaction();
@@ -95,11 +97,6 @@ public interface PlantRepository extends JpaRepository<Plant, String> {
                 if (plantExist == null) {
                     em.persist(plant);
                 } else {
-/*                    geoExist.setLatitude(geoposition.getLatitude());
-                    geoExist.setLongitude(geoposition.getLongitude());
-                    geoExist.setPlant(geoposition.getPlant());
-                    geoExist.setDeleted(0);
-                    geoExist.setUpdated(0);*/
                     em.merge(plant);
                 }
                 t.commit();

@@ -18,10 +18,12 @@ import java.util.List;
 public interface GeopositionRepository extends JpaRepository<Geoposition, Long> {
 
     Logger logger = LoggerFactory.getLogger(GeopositionRepository.class);
+    EntityManagerFactory emfGeopositionAdmin = Persistence.createEntityManagerFactory("geopositions_remote_admin");
+    EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
 
     default Double[] getLongLatRectangle() {
         Double[] rectangle = new Double[4];
-        EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
+        //EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
         EntityManager em = emfGeoposition.createEntityManager();
 
         try {
@@ -57,9 +59,9 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
     default List<Plant> getDifferentPlants() {
         List<Plant> plants = new ArrayList<>();
 
-        EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
+        //EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
         EntityManager em = emfGeoposition.createEntityManager();
-        TypedQuery<Plant> q = em.createQuery("SELECT DISTINCT a.plant FROM Geoposition a ORDER BY a.plant.scientific_name", Plant.class);
+        TypedQuery<Plant> q = em.createQuery("SELECT DISTINCT a.plant FROM Geoposition a  WHERE a.deleted =" +'0' + " ORDER BY a.plant.scientific_name", Plant.class);
 
         plants = q.getResultList();
         //service element of the list: for filter in React
@@ -73,7 +75,7 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
      * @return
      */
     default List<Geoposition> getNotDeletedGeopositionsWithPlantsID() {
-        EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
+        //EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
         EntityManager em = emfGeoposition.createEntityManager();
         List<Geoposition> allGeoposition = new ArrayList<>();
         TypedQuery<Geoposition> q = em.createQuery("SELECT NEW plantsAPI.markers.Geoposition(a.id, a.longitude, a.latitude, a.plant.id_gbif) FROM Geoposition a WHERE a.deleted != '" + 1 + "'", Geoposition.class);
@@ -101,7 +103,7 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
      * @return
      */
     default List<Geoposition> getDeletedGeopositions() {
-        EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
+        //EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
         EntityManager em = emfGeoposition.createEntityManager();
         List<Geoposition> allGeoposition = new ArrayList<>();
         TypedQuery<Geoposition> q = em.createQuery("SELECT NEW plantsAPI.markers.Geoposition(a.id) FROM Geoposition a WHERE a.deleted = '" + 1 + "'", Geoposition.class);
@@ -129,7 +131,7 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
      * @return
      */
     default List<Geoposition> getUpdatedGeopositions() {
-        EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
+        //EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
         EntityManager em = emfGeoposition.createEntityManager();
         List<Geoposition> allGeoposition = new ArrayList<>();
         TypedQuery<Geoposition> q = em.createQuery("SELECT NEW plantsAPI.markers.Geoposition(a.id, a.longitude, a.latitude, a.plant.id_gbif) FROM Geoposition a WHERE a.updated = '" + 1 + "'", Geoposition.class);
@@ -157,8 +159,8 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
      * @param id
      */
     default void deleteGeoposition(long id) {
-        EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions_remote_admin");
-        EntityManager em = emfGeoposition.createEntityManager();
+        //EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions_remote_admin");
+        EntityManager em = emfGeopositionAdmin.createEntityManager();
         Geoposition geoExist = em.find(Geoposition.class, id);
         if (geoExist != null) {
             try {
@@ -186,20 +188,14 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
      * @param geoposition
      */
     default void updateGeoposition(Geoposition geoposition) {
-        EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions_remote_admin");
-        EntityManager em = emfGeoposition.createEntityManager();
+        //EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions_remote_admin");
+        EntityManager em = emfGeopositionAdmin.createEntityManager();
         try {
             EntityTransaction t = em.getTransaction();
             try {
                 t.begin();
                 logger.info("update geoposition id {}", geoposition.getId());
-/*                geoExist.setLatitude(geoposition.getLatitude());
-                geoExist.setLongitude(geoposition.getLongitude());
-                geoExist.setPlant(geoposition.getPlant());
-                geoExist.setDeleted(0);
-                geoExist.setUpdated(0);*/
                 em.merge(geoposition);
-                //em.persist(geoposition);
                 t.commit();
             } finally {
                 if (t.isActive()) {
@@ -217,8 +213,8 @@ public interface GeopositionRepository extends JpaRepository<Geoposition, Long> 
      * @param geoposition
      */
     default void addGeoposition(Geoposition geoposition) {
-        EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions_remote_admin");
-        EntityManager em = emfGeoposition.createEntityManager();
+        //EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions_remote_admin");
+        EntityManager em = emfGeopositionAdmin.createEntityManager();
         try {
             EntityTransaction t = em.getTransaction();
             try {

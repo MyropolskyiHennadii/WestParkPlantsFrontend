@@ -12,6 +12,8 @@ import java.util.List;
 public interface SynonymRepository extends JpaRepository<PlantsSynonym, String> {
 
     Logger logger = LoggerFactory.getLogger(SynonymRepository.class);
+    EntityManagerFactory emfSynonymAdmin = Persistence.createEntityManagerFactory("plants_synonyms_remote_admin");
+    EntityManagerFactory emfSynonym = Persistence.createEntityManagerFactory("plants_synonyms");
 
     /**
      * get list updated plant's synonyms
@@ -19,7 +21,7 @@ public interface SynonymRepository extends JpaRepository<PlantsSynonym, String> 
      */
     default List<PlantsSynonym> getUpdatedSynonyms(){
         List<PlantsSynonym> plantsSynonyms = new ArrayList<>();
-        EntityManagerFactory emfSynonym = Persistence.createEntityManagerFactory("plants_synonyms");
+        //EntityManagerFactory emfSynonym = Persistence.createEntityManagerFactory("plants_synonyms");
         EntityManager em = emfSynonym.createEntityManager();
         TypedQuery<PlantsSynonym> q = em.createQuery("SELECT NEW plantsAPI.markers.PlantsSynonym(a.id, a.lang, a.lang_name, a.web_reference_wiki, a.plant.id_gbif) " +
                 "FROM PlantsSynonym a WHERE a.updated = '" + 1 + "'", PlantsSynonym.class);
@@ -47,8 +49,8 @@ public interface SynonymRepository extends JpaRepository<PlantsSynonym, String> 
      * @param synonym
      */
     default void updateSynonym(PlantsSynonym synonym) {
-        EntityManagerFactory emfPlant = Persistence.createEntityManagerFactory("plants_synonyms_remote_admin");
-        EntityManager em = emfPlant.createEntityManager();
+        //EntityManagerFactory emfPlant = Persistence.createEntityManagerFactory("plants_synonyms_remote_admin");
+        EntityManager em = emfSynonymAdmin.createEntityManager();
         PlantsSynonym synonymExist = em.find(PlantsSynonym.class, synonym.getId());
         try {
             EntityTransaction t = em.getTransaction();

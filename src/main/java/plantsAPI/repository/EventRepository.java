@@ -15,7 +15,8 @@ import java.util.List;
 public interface EventRepository extends JpaRepository<PlantsEvent, String> {
 
     Logger logger = LoggerFactory.getLogger(EventRepository.class);
-
+    EntityManagerFactory emfPlantEventAdmin = Persistence.createEntityManagerFactory("plants_events_remote_admin");
+    EntityManagerFactory emfPlantEvents = Persistence.createEntityManagerFactory("plants_events");
     /**
      * list with id_gbif of plants with event
      *
@@ -25,12 +26,12 @@ public interface EventRepository extends JpaRepository<PlantsEvent, String> {
      */
     default List<String> getEventsByDate(LocalDate currentDate, String event) {
         List<String> listEvents = new ArrayList<>();
-        EntityManagerFactory emfEvent = Persistence.createEntityManagerFactory("plants_events");
-        EntityManager em = emfEvent.createEntityManager();
+        //EntityManagerFactory emfEvent = Persistence.createEntityManagerFactory("plants_events");
+        EntityManager em = emfPlantEvents.createEntityManager();
 //TODO FUNCTION to MySQL
         TypedQuery<PlantsEvent> q = em.createQuery("SELECT a FROM PlantsEvent a WHERE " +
                 "a.event = '" +
-                event + "'", PlantsEvent.class);
+                event + "' AND a.deleted = '" + 0 +"'", PlantsEvent.class);
         List<PlantsEvent> events = q.getResultList();
         for (PlantsEvent ev : events) {
             LocalDate from = LocalDate.of(currentDate.getYear(), ev.getMonth_from(), ev.getDate_from());
@@ -56,8 +57,8 @@ public interface EventRepository extends JpaRepository<PlantsEvent, String> {
      */
     default List<PlantsEvent> getUpdatedEvents(){
         List<PlantsEvent> plantsEvents = new ArrayList<>();
-        EntityManagerFactory emfEvents = Persistence.createEntityManagerFactory("plants_events");
-        EntityManager em = emfEvents.createEntityManager();
+        //EntityManagerFactory emfEvents = Persistence.createEntityManagerFactory("plants_events");
+        EntityManager em = emfPlantEvents.createEntityManager();
 
         TypedQuery<PlantsEvent> q = em.createQuery("SELECT a FROM PlantsEvent a WHERE a.updated = '" + 1 + "'", PlantsEvent.class);
         try {
@@ -83,8 +84,8 @@ public interface EventRepository extends JpaRepository<PlantsEvent, String> {
      * @param event
      */
     default void updateEvent(PlantsEvent event) {
-        EntityManagerFactory emfPlant = Persistence.createEntityManagerFactory("plants_events_remote_admin");
-        EntityManager em = emfPlant.createEntityManager();
+        //EntityManagerFactory emfPlant = Persistence.createEntityManagerFactory("plants_events_remote_admin");
+        EntityManager em = emfPlantEventAdmin.createEntityManager();
         PlantsEvent eventExist = em.find(PlantsEvent.class, event.getId());
         try {
             EntityTransaction t = em.getTransaction();

@@ -17,8 +17,8 @@ class GeomarkersService {
 
     //set colour for feature by frequency
     setStyleForFeature(rateOfPlant, flowering) {
+        let rate = rateOfPlant;
         if (!flowering) {
-            let rate = rateOfPlant;
             if (rate > 250) { rate = 250 }
             let green = 0
             let blue = 0
@@ -44,11 +44,17 @@ class GeomarkersService {
                 }),
             })
         } else {
-            //#FF9E2C orange - for flowering plants
+             //#FF9E2C orange - for flowering plants
+             if(rate >= 215) {
+                rate = 215;
+            } else if(rate < 20){
+                rate = 19;
+            }
             return new Style({
                 image: new CircleStyle({
                     radius: 4,
-                    fill: new Fill({ color: '#FF9E2C' }),
+                    //fill: new Fill({ color: '#FF9E2C' }),
+                    fill: new Fill({ color: 'rgb(255,' + rate + ',0)' }),
                     stroke: new Stroke({
                         color: 'white',
                         width: 2,
