@@ -1,0 +1,11 @@
+<web-app>
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+    <context-param>
+        <param-name>log4jContextName</param-name>
+        <param-value>locations.artefacts.api</param-value>
+        <param-name>log4jConfiguration</param-name>
+        <param-value>WEB-INF/log4j2.xml</param-value>
+    </context-param>
+</web-app>

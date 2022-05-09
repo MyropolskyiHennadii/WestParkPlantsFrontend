@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="WestParkApi> %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
+        <RollingFile
+                name="westpark.api"
+                fileName="${sys:catalina.home}/logs/WestParkApi.log"
+                filePattern="${sys:catalina.home}/logs/WestParkApi.%d{dd-MMM}.log.gz"
+                ignoreExceptions="false"
+                immediateFlush="true">
+            <PatternLayout>
+                <Pattern>WestParkApi> %d{yyyy-MM-dd HH:mm:ss} %-5p %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="5 MB" />
+                <TimeBasedTriggeringPolicy interval="30"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" />
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- Log everything in hibernate -->
+        <Logger name="org.hibernate" level="warn" additivity="false">
+            <AppenderRef ref="ConsoleAppender" />
+            <AppenderRef ref="westpark.api"/>
+        </Logger>
+        <!-- Log all SQL statements -->
+        <Logger name="org.hibernate.SQL" level="info" additivity="false">
+            <AppenderRef ref="ConsoleAppender" />
+            <AppenderRef ref="westpark.api"/>
+        </Logger>
+
+        <Root level="debug">
+            <AppenderRef ref="ConsoleAppender" />
+            <AppenderRef ref="westpark.api"/>
+        </Root>
+
+    </Loggers>
+
+</Configuration>

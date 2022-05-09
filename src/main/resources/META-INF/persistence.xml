@@ -22,7 +22,7 @@
                       value="jdbc:mysql://localhost:3306/places_and_descriptions?useSSL=false&amp;autoReconnect=true&amp;serverTimezone=UTC&amp;characterEncoding=utf8"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
             <property name="hibernate.connection.username" value="remote_admin"/>
-            <property name="hibernate.connection.password" value="..."/>
+            <property name="hibernate.connection.password" value="maintain"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
         </properties>
     </persistence-unit>
