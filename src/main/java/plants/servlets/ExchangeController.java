@@ -43,7 +43,7 @@ public class ExchangeController {
 
     //to refresh private variables in API
     @Autowired
-    private API_GeopositionController api_geopositionController;
+    private PlantsServlet plantsServlet;
 
     @GetMapping("get_deleted_geopositions")
     public List<Geoposition> getDeletedGeopositions() {
@@ -75,7 +75,7 @@ public class ExchangeController {
             return false;
         }
         //refresh list geopositions and so on in main controller
-        api_geopositionController.refreshPrivateVariables();
+        plantsServlet.refreshPrivateVariables();
         return true;
     }
 
@@ -118,7 +118,7 @@ public class ExchangeController {
                     }
                 }
                 //refresh list geopositions and so on in main controller
-                api_geopositionController.refreshPrivateVariables();
+                plantsServlet.refreshPrivateVariables();
                 return true;
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -170,7 +170,7 @@ public class ExchangeController {
                             0, 0));
                 }
                 //refresh list geopositions and so on in main controller
-                api_geopositionController.refreshPrivateVariables();
+                plantsServlet.refreshPrivateVariables();
                 return true;
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -230,7 +230,7 @@ public class ExchangeController {
                             (String) location.get("id_gbif")));
                 }
                 //refresh list geopositions and so on in main controller
-                api_geopositionController.refreshPrivateVariables();
+                plantsServlet.refreshPrivateVariables();
             } catch (ParseException e) {
                 e.printStackTrace();
                 return false;
