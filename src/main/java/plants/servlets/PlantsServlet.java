@@ -3,6 +3,10 @@ package plants.servlets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import plants.model.Geoposition;
 import plants.model.Plant;
 import plants.repository.EventRepository;
@@ -20,6 +24,7 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 //@CrossOrigin(origins = "*")
@@ -44,6 +49,7 @@ public class PlantsServlet extends HttpServlet {
 
     @Override
     public void init() {
+        geopositionRepository = new GeopositionRepository();
         LOGGER.info("Servlet's initialisation {}", getServletContext().getClass().getName());
     }
 
