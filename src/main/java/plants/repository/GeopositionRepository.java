@@ -1,9 +1,10 @@
 package plants.repository;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import plants.model.Geoposition;
 import plants.model.Plant;
+import plants.servlets.PlantsServlet;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class GeopositionRepository {
 
-    Logger logger = LoggerFactory.getLogger(GeopositionRepository.class);
+    private static final Logger LOGGER = LogManager.getLogger(GeopositionRepository.class);
     EntityManagerFactory emfGeopositionAdmin = Persistence.createEntityManagerFactory("geopositions_remote_admin");
     EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions");
 
@@ -61,22 +62,11 @@ public class GeopositionRepository {
 
         EntityManager em = emfGeoposition.createEntityManager();
         List<Geoposition> allGeoposition = new ArrayList<>();
-        TypedQuery<Geoposition> q = em.createQuery("SELECT NEW plantsAPI.markers.Geoposition(a.id, a.longitude, a.latitude, a.plant.id_gbif) FROM Geoposition a WHERE a.deleted != '" + 1 + "'", Geoposition.class);
-        try {
-            EntityTransaction t = em.getTransaction();
-            try {
-                t.begin();
-                allGeoposition = q.getResultList();
-                t.commit();
-            } finally {
-                if (t.isActive()) {
-                    logger.error("-----------------Something wrong with getting list of geopositions");
-                    t.rollback();
-                }
-            }
-        } finally {
-            em.close();
-        }
+        TypedQuery<Geoposition> q = em.createQuery("SELECT NEW plants.model.Geoposition(a.id, a.longitude, a.latitude, a.plant.id_gbif) FROM Geoposition a WHERE a.deleted != '" + 1 + "'", Geoposition.class);
+        EntityTransaction t = em.getTransaction();
+        t.begin();
+        allGeoposition = q.getResultList();
+        t.commit();
         return allGeoposition;
     }
 
@@ -127,10 +117,9 @@ public class GeopositionRepository {
         EntityManager em = emfGeopositionAdmin.createEntityManager();
         Geoposition geoExist = em.find(Geoposition.class, id);
         if (geoExist != null) {
-
             EntityTransaction t = em.getTransaction();
             t.begin();
-            logger.info("Delete geoposition id {}", id);
+            LOGGER.info("Delete geoposition id {}", id);
             em.remove(geoExist);
             t.commit();
         }
@@ -148,7 +137,7 @@ public class GeopositionRepository {
         EntityTransaction t = em.getTransaction();
 
         t.begin();
-        logger.info("update geoposition id {}", geoposition.getId());
+        LOGGER.info("update geoposition id {}", geoposition.getId());
         em.merge(geoposition);
         t.commit();
     }
@@ -164,8 +153,8 @@ public class GeopositionRepository {
         EntityTransaction t = em.getTransaction();
 
         t.begin();
-        logger.info("add geoposition id {}", geoposition.getId() + ". Geoposition = " + geoposition);
-        logger.info("persist...");
+        LOGGER.info("add geoposition id {}", geoposition.getId() + ". Geoposition = " + geoposition);
+        LOGGER.info("persist...");
         em.persist(geoposition);
         t.commit();
 

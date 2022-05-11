@@ -3,10 +3,6 @@ package plants.servlets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import plants.model.Geoposition;
 import plants.model.Plant;
 import plants.repository.EventRepository;
@@ -24,7 +20,6 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Properties;
 
 //@CrossOrigin(origins = "*")
@@ -49,8 +44,14 @@ public class PlantsServlet extends HttpServlet {
 
     @Override
     public void init() {
+        plantRepository = new PlantRepository();
+        eventRepository = new EventRepository();
         geopositionRepository = new GeopositionRepository();
-        LOGGER.info("Servlet's initialisation {}", getServletContext().getClass().getName());
+
+        geopositions = geopositionRepository.getNotDeletedGeopositionsWithPlantsID();
+        longlatRectangle = geopositionRepository.getLongLatRectangle();
+        plants = geopositionRepository.getDifferentPlants();
+        LOGGER.info("Servlet's initialisation {} was done successfully.", getServletContext().getClass().getName());
     }
 
     @Override
@@ -117,7 +118,7 @@ public class PlantsServlet extends HttpServlet {
      * @return
      */
     /*    @PostMapping(value = "photos", headers = {"Content-type=application/json"})*/
-    public List<String> getPhotoForPlant(@RequestBody String params) {
+    public List<String> getPhotoForPlant(String params) {
         List<String> listImagesPath = new ArrayList<>();
         JSONParser parser = new JSONParser();
         try {
