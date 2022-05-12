@@ -1,5 +1,7 @@
 package plants.model;
 
+import org.json.JSONObject;
+
 import javax.persistence.*;
 
 @Entity
@@ -136,5 +138,19 @@ public class Geoposition {
     @Override
     public int hashCode() {
         return (int) longitude;
+    }
+
+    /**
+     * composes json-representation for author-exemplar
+     */
+    public JSONObject composeJsonObject() {
+        JSONObject jsonGeopositon = new JSONObject();
+        jsonGeopositon.put("id", id);
+        jsonGeopositon.put("longitude", longitude);
+        jsonGeopositon.put("latitude", latitude);
+        jsonGeopositon.put("updated", updated);
+        jsonGeopositon.put("deleted", deleted);
+        jsonGeopositon.put("plant", plant.composeJsonObject());
+        return jsonGeopositon;
     }
 }

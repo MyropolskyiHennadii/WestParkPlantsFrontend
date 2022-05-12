@@ -1,8 +1,13 @@
 package plants.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import plants.servlets.PlantsServlet;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -12,7 +17,7 @@ import java.util.Set;
 @Table(name = "plants")
 public class Plant {
 
-    private static Logger logger = LoggerFactory.getLogger(Plant.class);
+    private static final Logger LOGGER = LogManager.getLogger(PlantsServlet.class);
 
     @Id
     private String id_gbif;//id gbif
@@ -39,11 +44,11 @@ public class Plant {
     @JsonManagedReference//!!! important to prevent infinite loop with json references
     private Set<ImageFileWithMetadata> images = new HashSet<>();// foreign key in database. One Plant = many Images
 
-    @OneToMany(targetEntity=PlantsSynonym.class, mappedBy = "plant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = PlantsSynonym.class, mappedBy = "plant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference//!!! important to prevent infinite loop with json references
     private Set<PlantsSynonym> synonyms = new HashSet<>();// foreign key in database. One Plant = many synonyms
 
-    @OneToMany(targetEntity=PlantsEvent.class, mappedBy = "plant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = PlantsEvent.class, mappedBy = "plant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference//!!! important to prevent infinite loop with json references
     private Set<PlantsEvent> events = new HashSet<>();// foreign key in database. One Plant = many events
 
@@ -205,5 +210,46 @@ public class Plant {
     @Override
     public int hashCode() {
         return getScientific_name().length();
+    }
+
+    @OneToMany(targetEntity = PlantsEvent.class, mappedBy = "plant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference//!!! important to prevent infinite loop with json references
+    private Set<PlantsEvent> events = new HashSet<>();// foreign key in database. One Plant = many events
+
+    /**
+     * composes json-representation for author-exemplar
+     */
+    public JSONObject composeJsonObject() {
+        JSONObject jsonPlant = new JSONObject();
+        jsonPlant.put("id_gbif", id_gbif);
+        jsonPlant.put("common_names", common_names);
+        jsonPlant.put("scientific_name_family", scientific_name_family);
+        jsonPlant.put("scientific_name_authorship", scientific_name_authorship);
+        jsonPlant.put("scientific_name", scientific_name);
+        jsonPlant.put("scientific_name_family", scientific_name_family);
+        jsonPlant.put("web_reference_wiki", web_reference_wiki);
+        jsonPlant.put("kind", kind);
+        jsonPlant.put("show_only_flowering", show_only_flowering);
+        jsonPlant.put("updated", updated);
+        jsonPlant.put("deleted", deleted);
+        //images
+        JSONArray imagesJson = new JSONArray();
+        for (ImageFileWithMetadata image : getImages()) {
+            imagesJson.put(image.composeJsonObject());
+        }
+        jsonPlant.put("images", imagesJson);
+        //synonyms
+        JSONArray synonymsJson = new JSONArray();
+        for (PlantsSynonym synonym : getSynonyms()) {
+            synonymsJson.put(synonym.composeJsonObject());
+        }
+        jsonPlant.put("synonyms", synonymsJson);
+        //events
+        JSONArray eventsJson = new JSONArray();
+        for (PlantsEvent event : getEvents()) {
+            eventsJson.put(event.composeJsonObject());
+        }
+        jsonPlant.put("events", eventsJson);
+        return jsonPlant;
     }
 }
