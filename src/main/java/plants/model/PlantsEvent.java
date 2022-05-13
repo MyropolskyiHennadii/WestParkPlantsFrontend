@@ -1,8 +1,9 @@
 package plants.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -11,7 +12,7 @@ import java.util.Objects;
 @Table(name = "plants_events")
 public class PlantsEvent {
 
-    private static Logger logger = LoggerFactory.getLogger(PlantsEvent.class);
+    private static final Logger LOGGER = LogManager.getLogger(PlantsEvent.class);
 
     @Id
     //remark because of exchange with local database, where event can appear
@@ -171,5 +172,21 @@ public class PlantsEvent {
                 ", month_to=" + month_to +
                 ", plant=" + plant +
                 '}';
+    }
+
+    /**
+     * composes json-representation for author-exemplar
+     */
+    public JSONObject composeJsonObject() {
+        JSONObject jsonEvent = new JSONObject();
+        jsonEvent.put("id", id);
+        jsonEvent.put("event", event);
+        jsonEvent.put("date_from", date_from);
+        jsonEvent.put("month_from", month_from);
+        jsonEvent.put("date_to", date_to);
+        jsonEvent.put("month_to", month_to);
+        jsonEvent.put("updated", updated);
+        jsonEvent.put("deleted", deleted);
+        return jsonEvent;
     }
 }

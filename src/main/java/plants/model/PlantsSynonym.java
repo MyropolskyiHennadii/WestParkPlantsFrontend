@@ -1,15 +1,16 @@
 package plants.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "plants_synonyms")
 public class PlantsSynonym {
-    private static Logger logger = LoggerFactory.getLogger(Plant.class);
+    private static final Logger LOGGER = LogManager.getLogger(PlantsSynonym.class);
 
     @Id
     //remark because of exchange with local database, where synonym can appear
@@ -155,6 +156,20 @@ public class PlantsSynonym {
         if (o == null || getClass() != o.getClass()) return false;
         PlantsSynonym plantsSynonym = (PlantsSynonym) o;
         return getPlant().getId_gbif().equals(plantsSynonym.getPlant().getId_gbif())
-        && getLang().equals(((PlantsSynonym) o).getLang());
+                && getLang().equals(((PlantsSynonym) o).getLang());
+    }
+
+    /**
+     * composes json-representation for author-exemplar
+     */
+    public JSONObject composeJsonObject() {
+        JSONObject jsonSynonym = new JSONObject();
+        jsonSynonym.put("id", id);
+        jsonSynonym.put("lang", lang);
+        jsonSynonym.put("lang_name", lang_name);
+        jsonSynonym.put("web_reference_wiki", web_reference_wiki);
+        jsonSynonym.put("updated", updated);
+        jsonSynonym.put("deleted", deleted);
+        return jsonSynonym;
     }
 }

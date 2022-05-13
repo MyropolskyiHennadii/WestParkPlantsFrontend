@@ -5,9 +5,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import plants.servlets.PlantsServlet;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -17,7 +14,7 @@ import java.util.Set;
 @Table(name = "plants")
 public class Plant {
 
-    private static final Logger LOGGER = LogManager.getLogger(PlantsServlet.class);
+    private static final Logger LOGGER = LogManager.getLogger(Plant.class);
 
     @Id
     private String id_gbif;//id gbif
@@ -211,10 +208,6 @@ public class Plant {
     public int hashCode() {
         return getScientific_name().length();
     }
-
-    @OneToMany(targetEntity = PlantsEvent.class, mappedBy = "plant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference//!!! important to prevent infinite loop with json references
-    private Set<PlantsEvent> events = new HashSet<>();// foreign key in database. One Plant = many events
 
     /**
      * composes json-representation for author-exemplar

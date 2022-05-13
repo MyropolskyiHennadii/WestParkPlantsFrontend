@@ -1,8 +1,10 @@
 package plants.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
+import plants.servlets.PlantsServlet;
 
 import javax.persistence.*;
 import java.io.File;
@@ -12,7 +14,7 @@ import java.time.LocalDate;
 @Table(name = "pictures")
 public class ImageFileWithMetadata {
 
-    private static Logger logger = LoggerFactory.getLogger(ImageFileWithMetadata.class);
+    private static final Logger LOGGER = LogManager.getLogger(ImageFileWithMetadata.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -161,5 +163,17 @@ public class ImageFileWithMetadata {
     @Override
     public int hashCode() {
         return getLongitude().intValue();
+    }
+
+    /**
+     * composes json-representation for author-exemplar
+     */
+    public JSONObject composeJsonObject() {
+        JSONObject jsonImage = new JSONObject();
+        jsonImage.put("id", id);
+        jsonImage.put("organ", organ);
+        jsonImage.put("photos_date", photos_date.toString());
+        jsonImage.put("path_to_picture", path_to_picture);
+        return jsonImage;
     }
 }
