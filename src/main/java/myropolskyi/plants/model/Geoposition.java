@@ -1,4 +1,4 @@
-package plants.model;
+package myropolskyi.plants.model;
 
 import org.json.JSONObject;
 

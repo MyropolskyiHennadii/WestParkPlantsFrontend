@@ -1,9 +1,9 @@
-package plants.repository;
+package myropolskyi.plants.repository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import plants.model.ImageFileWithMetadata;
-import plants.model.Plant;
+import myropolskyi.plants.model.ImageFileWithMetadata;
+import myropolskyi.plants.model.Plant;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public class PlantRepository {
 
     private static final Logger LOGGER = LogManager.getLogger(PlantRepository.class);
     EntityManagerFactory emfPlantAdmin = Persistence.createEntityManagerFactory("plants_remote_admin");
-    EntityManagerFactory emfPlant = Persistence.createEntityManagerFactory("plants");
+    EntityManagerFactory emfPlant = Persistence.createEntityManagerFactory("myropolskyi/plants");
 
     /**
      * all paths to photos for the plant
@@ -42,7 +42,7 @@ public class PlantRepository {
      */
     public List<Plant> getUpdatedPlants() {
         EntityManager em = emfPlant.createEntityManager();
-        TypedQuery<Plant> q = em.createQuery("SELECT NEW plants.model.Plant(a.id_gbif, a.common_names, a.scientific_name_family, a.scientific_name_authorship, a.scientific_name, a.web_reference_wiki, a.kind, a.show_only_flowering, 0, 0) FROM Plant a WHERE a.updated = '" + 1 + "'", Plant.class);
+        TypedQuery<Plant> q = em.createQuery("SELECT NEW myropolskyi.plants.model.Plant(a.id_gbif, a.common_names, a.scientific_name_family, a.scientific_name_authorship, a.scientific_name, a.web_reference_wiki, a.kind, a.show_only_flowering, 0, 0) FROM Plant a WHERE a.updated = '" + 1 + "'", Plant.class);
         return q.getResultList();
     }
 
@@ -55,20 +55,13 @@ public class PlantRepository {
         EntityManager em = emfPlantAdmin.createEntityManager();
         Plant plantExist = em.find(Plant.class, plant.getId_gbif());
         EntityTransaction t = em.getTransaction();
-        try {
-            t.begin();
-            LOGGER.info("update plant id {}", plant.getId_gbif());
-            if (plantExist == null) {
-                em.persist(plant);
-            } else {
-                em.merge(plant);
-            }
-            t.commit();
-        } finally {
-            if (t.isActive()) {
-                LOGGER.error("-----------------Something wrong with updating plant's id {}", plant.getId_gbif());
-                t.rollback();
-            }
+        t.begin();
+        LOGGER.info("update plant id {}", plant.getId_gbif());
+        if (plantExist == null) {
+            em.persist(plant);
+        } else {
+            em.merge(plant);
         }
+        t.commit();
     }
 }

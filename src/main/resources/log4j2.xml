@@ -2,12 +2,12 @@
 <Configuration status="INFO">
     <Appenders>
         <Console name="ConsoleAppender" target="SYSTEM_OUT">
-            <PatternLayout pattern="WestParkApi> %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+            <PatternLayout pattern="WestParkPlantsApi> %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
         </Console>
         <RollingFile
                 name="westpark.api"
-                fileName="${sys:catalina.home}/logs/WestParkApi.log"
-                filePattern="${sys:catalina.home}/logs/WestParkApi.%d{dd-MMM}.log.gz"
+                fileName="${project.basedir}/logs/WestParkPlantsApi.log"
+                filePattern="${project.basedir}/logs/WestParkPlantsApi.%d{dd-MMM}.log.gz"
                 ignoreExceptions="false"
                 immediateFlush="true">
             <PatternLayout>

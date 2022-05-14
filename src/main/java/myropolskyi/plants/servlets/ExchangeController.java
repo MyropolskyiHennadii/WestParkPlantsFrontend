@@ -1,19 +1,4 @@
-package plants.servlets;
-
-import plants.model.Geoposition;
-import plants.model.Plant;
-import plants.model.PlantsEvent;
-import plants.model.PlantsSynonym;
-import plants.repository.EventRepository;
-import plants.repository.GeopositionRepository;
-import plants.repository.PlantRepository;
-import plants.repository.SynonymRepository;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.util.List;
-import java.util.stream.Collectors;
+package myropolskyi.plants.servlets;
 
 /*@CrossOrigin(origins = "*")
 @RestController

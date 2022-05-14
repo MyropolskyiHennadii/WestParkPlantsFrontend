@@ -1,10 +1,9 @@
-package plants.repository;
+package myropolskyi.plants.repository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import plants.model.Geoposition;
-import plants.model.Plant;
-import plants.servlets.PlantsServlet;
+import myropolskyi.plants.model.Geoposition;
+import myropolskyi.plants.model.Plant;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -62,7 +61,7 @@ public class GeopositionRepository {
 
         EntityManager em = emfGeoposition.createEntityManager();
         List<Geoposition> allGeoposition = new ArrayList<>();
-        TypedQuery<Geoposition> q = em.createQuery("SELECT NEW plants.model.Geoposition(a.id, a.longitude, a.latitude, a.plant.id_gbif) FROM Geoposition a WHERE a.deleted != '" + 1 + "'", Geoposition.class);
+        TypedQuery<Geoposition> q = em.createQuery("SELECT NEW myropolskyi.plants.model.Geoposition(a.id, a.longitude, a.latitude, a.plant.id_gbif) FROM Geoposition a WHERE a.deleted != '" + 1 + "'", Geoposition.class);
         EntityTransaction t = em.getTransaction();
         t.begin();
         allGeoposition = q.getResultList();
@@ -79,7 +78,7 @@ public class GeopositionRepository {
 
         EntityManager em = emfGeoposition.createEntityManager();
         List<Geoposition> allGeoposition = new ArrayList<>();
-        TypedQuery<Geoposition> q = em.createQuery("SELECT NEW plants.model.Geoposition(a.id) FROM Geoposition a WHERE a.deleted = '" + 1 + "'", Geoposition.class);
+        TypedQuery<Geoposition> q = em.createQuery("SELECT NEW myropolskyi.plants.model.Geoposition(a.id) FROM Geoposition a WHERE a.deleted = '" + 1 + "'", Geoposition.class);
 
         EntityTransaction t = em.getTransaction();
         t.begin();
@@ -97,7 +96,7 @@ public class GeopositionRepository {
 
         EntityManager em = emfGeoposition.createEntityManager();
         List<Geoposition> allGeoposition = new ArrayList<>();
-        TypedQuery<Geoposition> q = em.createQuery("SELECT NEW plants.model.Geoposition(a.id, a.longitude, a.latitude, a.plant.id_gbif) FROM Geoposition a WHERE a.updated = '" + 1 + "'", Geoposition.class);
+        TypedQuery<Geoposition> q = em.createQuery("SELECT NEW myropolskyi.plants.model.Geoposition(a.id, a.longitude, a.latitude, a.plant.id_gbif) FROM Geoposition a WHERE a.updated = '" + 1 + "'", Geoposition.class);
 
         EntityTransaction t = em.getTransaction();
         t.begin();

@@ -1,6 +1,3 @@
-/src/main/resources/static/PreparedPhotosForPlantsDB/3/
-/src/main/resources/static/PreparedPhotosForPlantsDB/8/
-/src/main/resources/static/PreparedPhotosForPlantsDB/11/
-/src/main/resources/static/PreparedPhotosForPlantsDB/12/
-/js_westpark_frontend/node_modules/
 /.idea/
+/logs/
+/target/

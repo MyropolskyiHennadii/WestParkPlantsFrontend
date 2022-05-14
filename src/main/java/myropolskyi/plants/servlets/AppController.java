@@ -1,4 +1,4 @@
-package plants.servlets;
+package myropolskyi.plants.servlets;
 
 
 /*@Controller*/

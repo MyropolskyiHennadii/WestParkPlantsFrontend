@@ -7,6 +7,7 @@
     <groupId>myropolskyi.westpark</groupId>
     <artifactId>WestParkPlantsAPI</artifactId>
     <version>2.0.0</version>
+    <packaging>war</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

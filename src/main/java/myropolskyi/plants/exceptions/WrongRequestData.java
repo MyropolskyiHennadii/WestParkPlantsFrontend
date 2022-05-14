@@ -1,4 +1,4 @@
-package plants.exceptions;
+package myropolskyi.plants.exceptions;
 
 public class WrongRequestData extends Exception{
 

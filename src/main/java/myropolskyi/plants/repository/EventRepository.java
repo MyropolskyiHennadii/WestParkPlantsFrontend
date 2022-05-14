@@ -1,8 +1,9 @@
-package plants.repository;
+package myropolskyi.plants.repository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import plants.model.PlantsEvent;
+import org.json.JSONArray;
+import myropolskyi.plants.model.PlantsEvent;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -23,8 +24,9 @@ public class EventRepository {
      * @param event
      * @return
      */
-    public List<String> getEventsByDate(LocalDate currentDate, String event) {
-        List<String> listEvents = new ArrayList<>();
+    public JSONArray getEventsByDate(LocalDate currentDate, String event) {
+
+        JSONArray floweringId = new JSONArray();
         EntityManager em = emfPlantEvents.createEntityManager();
 //TODO FUNCTION to MySQL
         TypedQuery<PlantsEvent> q = em.createQuery("SELECT a FROM PlantsEvent a WHERE " +
@@ -42,10 +44,10 @@ public class EventRepository {
                 }
             }
             if ((currentDate.isBefore(to) || currentDate.equals(to)) && (currentDate.isAfter(from) || currentDate.equals(from))) {
-                listEvents.add(ev.getPlant().getId_gbif());
+                floweringId.put(ev.getPlant().getId_gbif());
             }
         }
-        return listEvents;
+        return floweringId;
     }
 
     /**
@@ -70,20 +72,15 @@ public class EventRepository {
         PlantsEvent eventExist = em.find(PlantsEvent.class, event.getId());
 
         EntityTransaction t = em.getTransaction();
-        try {
-            t.begin();
-            LOGGER.info("update event id {}", event.getId());
-            if (eventExist == null) {
-                em.persist(event);
-            } else {
-                em.merge(event);
-            }
-            t.commit();
-        } finally {
-            if (t.isActive()) {
-                LOGGER.error("-----------------Something wrong with updating event id {}", event.getId());
-                t.rollback();
-            }
+
+        t.begin();
+        LOGGER.info("update event id {}", event.getId());
+        if (eventExist == null) {
+            em.persist(event);
+        } else {
+            em.merge(event);
         }
+        t.commit();
+
     }
 }

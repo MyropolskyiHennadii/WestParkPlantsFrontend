@@ -1,4 +1,4 @@
-package plants.model;
+package myropolskyi.plants.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.logging.log4j.LogManager;
