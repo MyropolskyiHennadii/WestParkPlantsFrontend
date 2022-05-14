@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import myropolskyi.plants.exceptions.WrongRequestData;
 import myropolskyi.plants.model.Geoposition;
 import myropolskyi.plants.model.Plant;
 import myropolskyi.plants.repository.EventRepository;
@@ -24,11 +23,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Properties;
 
-//@CrossOrigin(origins = "*")
-//after dockerizing frontend:
-/*@CrossOrigin(origins = "http://94.130.181.51:8094")
-@RestController
-@RequestMapping("apiWestpark/")*/
 @WebServlet(name = "westparkPlants", urlPatterns = "/apiWestparkPlants")
 public class PlantsServlet extends HttpServlet {
 
@@ -38,8 +32,7 @@ public class PlantsServlet extends HttpServlet {
 
     //data to return, it fills when servlet init
     //JSONArray contains List<Geoposition> geopositions, Double[] longlatRectangle, List<Plant> plants
-    private JSONObject dataToReturn;
-
+    private final JSONObject dataToReturn = new JSONObject();
     private List<Geoposition> geopositions;//all geoposition
     private Double[] longlatRectangle;//main rectangle for map
     private List<Plant> plants;//different plants from geopositions
@@ -63,6 +56,7 @@ public class PlantsServlet extends HttpServlet {
         setAccessControlHeaders(response);
         try {
             if (dataToReturn == null) {
+                LOGGER.info("doPost -> Empty data for client. Filling data...");
                 refreshDataForClient();
             }
             //have to add list of flowering plant, because it is dynamic and depends on today's date
@@ -70,9 +64,8 @@ public class PlantsServlet extends HttpServlet {
             sendOkToClient(response, dataToReturn);
         } catch (JSONException e) {
             LOGGER.error("doPost -> Impossible JSON-data: {}", e.getMessage());
+            sendErrorToClient(response, "Intern error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-
-        LOGGER.debug("doPost");
     }
 
     @Override
@@ -88,7 +81,7 @@ public class PlantsServlet extends HttpServlet {
     /**
      * set null to above session private variables (we need it after exchange, for example)
      */
-    public void refreshDataForClient() {
+    public void refreshDataForClient() throws JSONException {
 
         GeopositionRepository geopositionRepository = new GeopositionRepository();
         geopositions = geopositionRepository.getNotDeletedGeopositionsWithPlantsID();
@@ -101,7 +94,7 @@ public class PlantsServlet extends HttpServlet {
         //transform to json plants
         JSONArray jsonPlants = new JSONArray();
         plants.stream().forEach(a -> jsonPlants.put(a.composeJsonObject()));
-        dataToReturn.put("myropolskyi/plants", jsonPlants);
+        dataToReturn.put("plants", jsonPlants);
         LOGGER.debug("refreshConstantDataForClient -> plants were added.");
         //transform to json geopositions
         JSONArray jsonGeopositions = new JSONArray();
@@ -123,25 +116,6 @@ public class PlantsServlet extends HttpServlet {
         LocalDate today = LocalDate.now();
         String event = "flowering";
         return new EventRepository().getEventsByDate(today, event);
-    }
-
-    /**
-     * return list of relative paths to photos for frontend
-     *
-     * @param id_gbif = id_gbif of plant
-     * @return
-     */
-    /*    @PostMapping(value = "photos", headers = {"Content-type=application/json"})*/
-    public void sendPhotoForPlant(String id_gbif, HttpServletResponse response) throws WrongRequestData {
-/*        if (id_gbif == null || id_gbif.isEmpty()) {
-            throw new WrongRequestData("doPost -> Request data is null or empty.");
-        }
-        List<String> listImagesPath = new PlantRepository().getPictureByPlantsID(id_gbif);
-        JSONArray jsonToReturn = new JSONArray();
-        for (String path : listImagesPath) {
-            jsonToReturn.put(path);
-        }
-        sendOkToClient(response, jsonToReturn);*/
     }
 
     /**
@@ -178,22 +152,6 @@ public class PlantsServlet extends HttpServlet {
     }
 
     /**
-     * sets headers for servlet's response
-     *
-     * @param resp
-     */
-    public static void setAccessControlHeaders(HttpServletResponse resp) {
-
-        resp.setHeader("Access-Control-Allow-Origin", properties.getProperty("Access.Control.Allow.Origin"));
-        resp.setHeader("Access-Control-Allow-Methods", properties.getProperty("Access.Control.Allow.Methods"));
-        resp.setHeader("Access-Control-Allow-Headers", properties.getProperty("Access.Control.Allow.Headers"));
-        /*resp.setHeader("Access-Control-Allow-Credentials", "true");*/
-        /*resp.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");*/
-        /*resp.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");*/
-    }
-
-
-    /**
      * gets data from request
      *
      * @param req
@@ -209,5 +167,20 @@ public class PlantsServlet extends HttpServlet {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * sets headers for servlet's response
+     *
+     * @param resp
+     */
+    public static void setAccessControlHeaders(HttpServletResponse resp) {
+
+        resp.setHeader("Access-Control-Allow-Origin", properties.getProperty("Access.Control.Allow.Origin"));
+        resp.setHeader("Access-Control-Allow-Methods", properties.getProperty("Access.Control.Allow.Methods"));
+        resp.setHeader("Access-Control-Allow-Headers", properties.getProperty("Access.Control.Allow.Headers"));
+        /*resp.setHeader("Access-Control-Allow-Credentials", "true");*/
+        /*resp.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");*/
+        /*resp.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");*/
     }
 }
