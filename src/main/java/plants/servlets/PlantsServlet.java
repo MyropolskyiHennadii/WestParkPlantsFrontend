@@ -3,6 +3,7 @@ package plants.servlets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
+import plants.exceptions.WrongRequestData;
 import plants.model.Geoposition;
 import plants.model.Plant;
 import plants.repository.EventRepository;
@@ -44,6 +45,7 @@ public class PlantsServlet extends HttpServlet {
 
     @Override
     public void init() {
+        LOGGER.info("Servlet's initialisation {} is beginning.", getServletContext().getClass().getName());
         plantRepository = new PlantRepository();
         eventRepository = new EventRepository();
         geopositionRepository = new GeopositionRepository();
@@ -56,6 +58,7 @@ public class PlantsServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        LOGGER.info("doPost -> Beginning.");
         setAccessControlHeaders(response);
 
         LOGGER.debug("doPost");
@@ -114,22 +117,20 @@ public class PlantsServlet extends HttpServlet {
     /**
      * return list of relative paths to photos for frontend
      *
-     * @param params = id_gbif of plant
+     * @param id_gbif = id_gbif of plant
      * @return
      */
     /*    @PostMapping(value = "photos", headers = {"Content-type=application/json"})*/
-    public List<String> getPhotoForPlant(String params) {
-        List<String> listImagesPath = new ArrayList<>();
-        JSONParser parser = new JSONParser();
-        try {
-            JSONObject jsonObject = (JSONObject) parser.parse(params);
-            JSONObject jsonParameter = (JSONObject) jsonObject.get("params");
-            String id_gbif = (String) jsonParameter.get("id_gbif");
-            listImagesPath = plantRepository.getPictureByPlantsID(id_gbif);
-        } catch (ParseException e) {
-            LOGGER.error("Can't parse json query {}", e.getMessage());
+    public void sendPhotoForPlant(String id_gbif, HttpServletResponse response) throws WrongRequestData {
+        if (id_gbif == null || id_gbif.isEmpty()) {
+            throw new WrongRequestData("doPost -> Request data is null or empty.");
         }
-        return listImagesPath;
+        List<String> listImagesPath = plantRepository.getPictureByPlantsID(id_gbif);
+        JSONArray jsonToReturn = new JSONArray();
+        for (String path: listImagesPath){
+            jsonToReturn.put(path);
+        }
+        sendOkToClient(response, jsonToReturn);
     }
 
     /**

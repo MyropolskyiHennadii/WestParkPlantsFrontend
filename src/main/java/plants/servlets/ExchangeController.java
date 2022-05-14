@@ -1,14 +1,5 @@
 package plants.servlets;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
 import plants.model.Geoposition;
 import plants.model.Plant;
 import plants.model.PlantsEvent;
@@ -24,13 +15,13 @@ import javax.persistence.Persistence;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*")
+/*@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("exchangeWestpark/")
+@RequestMapping("exchangeWestpark/")*/
 //Controller for exchange between local and remote databases
 public class ExchangeController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ExchangeController.class);
+/*    private static final Logger logger = LoggerFactory.getLogger(ExchangeController.class);
 
     @Autowired
     private GeopositionRepository geopositionRepository;
@@ -43,14 +34,14 @@ public class ExchangeController {
 
     //to refresh private variables in API
     @Autowired
-    private PlantsServlet plantsServlet;
+    private PlantsServlet plantsServlet;*/
 
-    @GetMapping("get_deleted_geopositions")
-    public List<Geoposition> getDeletedGeopositions() {
+/*    @GetMapping("get_deleted_geopositions")*/
+/*    public List<Geoposition> getDeletedGeopositions() {
         List<Geoposition> deleted = geopositionRepository.getDeletedGeopositions();
         logger.info("-------------------------- Get REMOTE deleted geo. Size: " + deleted.size());
         return deleted;
-    }
+    }*/
 
     /**
      * receive JSON with id geopositions to delete
@@ -58,10 +49,10 @@ public class ExchangeController {
      * @param params = JSON obj
      * @return OK = true/false
      */
-    @PostMapping(value = "set_deleted_geopositions", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public boolean setDeletedGeopositions(@RequestBody String params) {
-        logger.info("-------------------------- Set REMOTE deleted geo. " + params);
-        JSONParser parser = new JSONParser();
+  /*  @PostMapping(value = "set_deleted_geopositions", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})*/
+    public boolean setDeletedGeopositions(String params) {
+/*        logger.info("-------------------------- Set REMOTE deleted geo. " + params);*/
+/*        JSONParser parser = new JSONParser();
         try {
             JSONObject results = (JSONObject) parser.parse(params);
             JSONArray deleted = (JSONArray) results.get("deleted_geopositions");
@@ -75,7 +66,7 @@ public class ExchangeController {
             return false;
         }
         //refresh list geopositions and so on in main controller
-        plantsServlet.refreshPrivateVariables();
+        plantsServlet.refreshPrivateVariables();*/
         return true;
     }
 
@@ -84,13 +75,13 @@ public class ExchangeController {
      *
      * @return
      */
-    @GetMapping("get_updated_geopositions")
+/*    @GetMapping("get_updated_geopositions")
     public List<Geoposition> getUpdatedGeopositions() {
         logger.info("-------------------------- Get REMOTE updated geo. ");
         List<Geoposition> updated = geopositionRepository.getUpdatedGeopositions();
         logger.info("-------------------------- Size: " + updated.size());
         return updated;
-    }
+    }*/
 
     /**
      * receive JSON with id geopositions to update
@@ -98,10 +89,10 @@ public class ExchangeController {
      * @param @param params = JSON obj
      * @return OK = true/false
      */
-    @PostMapping(value = "set_updated_geopositions", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public boolean setUpdatedGeopositions(@RequestBody String params) {
+    /*@PostMapping(value = "set_updated_geopositions", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})*/
+    public boolean setUpdatedGeopositions(String params) {
         if (params != null) {
-            logger.info("-------------------------- Set REMOTE updated geo. " + params);
+           /* logger.info("-------------------------- Set REMOTE updated geo. " + params);
             EntityManagerFactory emfGeoposition = Persistence.createEntityManagerFactory("geopositions_remote_admin");
             EntityManager em = emfGeoposition.createEntityManager();
             JSONParser parser = new JSONParser();
@@ -123,9 +114,9 @@ public class ExchangeController {
             } catch (ParseException e) {
                 e.printStackTrace();
                 return false;
-            }
+            }*/
         }
-        logger.info("-------------------------- Set REMOTE updated geo = NULL!!!");
+/*        logger.info("-------------------------- Set REMOTE updated geo = NULL!!!");*/
         return false;
     }
 
@@ -134,13 +125,13 @@ public class ExchangeController {
      *
      * @return
      */
-    @GetMapping("get_updated_plants")
+/*    @GetMapping("get_updated_plants")
     public List<Plant> getUpdatedPlants() {
         logger.info("-------------------------- Get REMOTE updated plants. ");
         List<Plant> updated = plantRepository.getUpdatedPlants();
         logger.info("-------------------------- Size: " + updated.size());
         return updated;
-    }
+    }*/
 
     /**
      * receive JSON with plants to update
@@ -148,9 +139,9 @@ public class ExchangeController {
      * @param @param params = JSON obj
      * @return OK = true/false
      */
-    @PostMapping(value = "set_updated_plants", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public boolean setUpdatedPlants(@RequestBody String params) {
-        if (params != null) {
+   /* @PostMapping(value = "set_updated_plants", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})*/
+    public boolean setUpdatedPlants(String params) {
+  /*      if (params != null) {
             logger.info("-------------------------- Set LOCAL updated plants. " + params);
             JSONParser parser = new JSONParser();
             try {
@@ -177,7 +168,7 @@ public class ExchangeController {
                 return false;
             }
         }
-        logger.info("-------------------------- Set LOCAL updated plants = NULL!!!");
+        logger.info("-------------------------- Set LOCAL updated plants = NULL!!!");*/
         return false;
     }
 
@@ -186,7 +177,7 @@ public class ExchangeController {
      *
      * @return
      */
-    @GetMapping("get_updated_synonyms")
+  /*  @GetMapping("get_updated_synonyms")
     public List<JSONObject> getUpdatedSynonyms() {
         logger.info("-------------------------- Get LOCAL updated synonyms.");
         List<PlantsSynonym> updated = synonymRepository.getUpdatedSynonyms();
@@ -204,7 +195,7 @@ public class ExchangeController {
                 .collect(Collectors.toList());
         logger.info("-------------------------- Size: " + updated.size());
         return updatedJson;
-    }
+    }*/
 
     /**
      * receive JSON with synonyms to update
@@ -212,7 +203,7 @@ public class ExchangeController {
      * @param @param params = JSON obj
      * @return OK = true/false
      */
-    @PostMapping(value = "set_updated_synonyms", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+/*    @PostMapping(value = "set_updated_synonyms", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public boolean setUpdatedSynonyms(@RequestBody String params) {
         if (params != null) {
             logger.info("-------------------------- Set REMOTE updated synonyms." + params);
@@ -239,13 +230,14 @@ public class ExchangeController {
         }
         logger.info("-------------------------- Set REMOTE updated synonyms = NULL!!!");
         return false;
-    }
+    }*/
 
     /**
      * get list updated events
      *
      * @return
      */
+/*
     @GetMapping("get_updated_events")
     public List<JSONObject> getUpdatedEvents() {
         logger.info("-------------------------- Get LOCAL updated events. ");
@@ -267,6 +259,7 @@ public class ExchangeController {
         logger.info("-------------------------- Size: " + updated.size());
         return updatedJson;
     }
+*/
 
     /**
      * receive JSON with events to update
@@ -274,7 +267,7 @@ public class ExchangeController {
      * @param @param params = JSON obj
      * @return OK = true/false
      */
-    @PostMapping(value = "set_updated_events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+/*    @PostMapping(value = "set_updated_events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public boolean setUpdatedEvents(@RequestBody String params) {
         if (params != null) {
             logger.info("-------------------------- Set REMOTE updated events. " + params);
@@ -302,5 +295,5 @@ public class ExchangeController {
         }
         logger.info("-------------------------- Set REMOTE updated events = NULL!!!");
         return false;
-    }
+    }*/
 }
