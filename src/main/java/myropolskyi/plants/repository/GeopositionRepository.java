@@ -44,7 +44,7 @@ public class GeopositionRepository {
     public List<Plant> getDifferentPlants() {
         List<Plant> plants = new ArrayList<>();
         EntityManager em = emfGeoposition.createEntityManager();
-        TypedQuery<Plant> q = em.createQuery("SELECT DISTINCT a.plant FROM Geoposition a  WHERE a.deleted =" + '0' + " ORDER BY a.plant.scientific_name", Plant.class);
+        TypedQuery<Plant> q = em.createQuery("SELECT DISTINCT a.plant FROM Geoposition a WHERE a.deleted =" + '0' + " ORDER BY a.plant.scientific_name", Plant.class);
 
         plants = q.getResultList();
         //service element of the list: for filter in React

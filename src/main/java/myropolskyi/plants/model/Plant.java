@@ -193,7 +193,7 @@ public class Plant {
 
     @Override
     public String toString() {
-        return ("id_gbif = " + id_gbif + "; " + scientific_name + ", nameAuthorship = " + scientific_name_authorship);
+        return ("id_gbif = " + id_gbif + "; " + scientific_name + ", nameAuthorship = " + scientific_name_authorship + ". Images size: " + images.size() + "|. ");
     }
 
     @Override
