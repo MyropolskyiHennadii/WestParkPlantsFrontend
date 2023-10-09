@@ -34,7 +34,7 @@
             <AppenderRef ref="westpark.api"/>
         </Logger>
 
-        <Root level="debug">
+        <Root level="info">
             <AppenderRef ref="ConsoleAppender" />
             <AppenderRef ref="westpark.api"/>
         </Root>
